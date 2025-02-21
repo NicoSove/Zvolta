@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="stylesheet" href="registrazione.css"> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrazione</title>
@@ -62,28 +61,25 @@
 </head>
 <body>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" onsubmit="return validaPassword()">
-        <div class="login-container">
-        <h2>REGISTRAZIONE</h2>
-            <input type="text" name="username" placeholder="Username" required> <br>
-            <input type="text" name="nome" placeholder="Nome"required> <br>
-            <input type="text" name="cognome" placeholder="Cognome"required> <br>
-            <input type="email" name="email" placeholder="Email"required> <br>
-            <input type="password" name="password" placeholder="Password"required> <br>
-            <input type="number" name="telefono" placeholder="Telefono"required> <br>
+        Username <input type="text" name="username" required> <br>
+        Nome <input type="text" name="nome" required> <br>
+        Cognome <input type="text" name="cognome" required> <br>
+        Email <input type="email" name="email" required> <br>
+        Password <input type="password" name="password" required> <br>
+        Telefono <input type="number" name="telefono" required> <br>
 
-            Ruolo 
-            <select name="ruolo" id="ruolo" onchange="mostraCoordinatore()" required>
-                <option value="admin">Admin</option>
-                <option value="coordinatore">Coordinatore</option>
-                <option value="utente_base">Utente base</option>
-            </select> <br>
+        Ruolo 
+        <select name="ruolo" id="ruolo" onchange="mostraCoordinatore()" required>
+            <option value="admin">Admin</option>
+            <option value="coordinatore">Coordinatore</option>
+            <option value="utente_base">Utente base</option>
+        </select> <br>
 
-            <div id="divCoordinatore" style="display: none;">
-                Coordinatore di riferimento: <input type="text" name="coordinatore"> <br>
-            </div>
-
-            <button type="submit">Registra</button>
+        <div id="divCoordinatore" style="display: none;">
+            Coordinatore di riferimento: <input type="text" name="coordinatore"> <br>
         </div>
+
+        <input type="submit" value="Registra">
     </form>
 
     <?php
