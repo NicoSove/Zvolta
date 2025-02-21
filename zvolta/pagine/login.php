@@ -11,7 +11,7 @@ function generateCaptcha($length = 6) {
     }
     $_SESSION['captcha'] = $captcha; // Memorizza il CAPTCHA nella sessione
     return $captcha; // Restituisce il CAPTCHA generato
-}// Funzione per creare un'immagine CAPTCHA
+}
 
 // Funzione per creare un'immagine CAPTCHA
 function createCaptchaImage($captcha) {
@@ -96,21 +96,27 @@ if (isset($_GET['captcha']) && $_GET['captcha'] == 1) {
     exit(); // Esci dopo aver generato l'immagine
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login </title>
+    <title>Login</title>
+    <link rel="stylesheet" href="login.css"> 
 </head>
 <body>
-    <form action="<?php echo $_SERVER['PHP_SELF']?>" method="POST"> 
-        Username: <input type="text" name="username" required> <br> 
-        Password: <input type="password" name="password" required> <br> 
-        CAPTCHA: <br> 
-        <img src="<?php echo $_SERVER['PHP_SELF'] . '?captcha=1'; ?>" alt="CAPTCHA Image"><br> 
-        <input type="text" name="captcha" required> <br> 
-        <input type="submit" value="Login"> 
-    </form>
+    <div class="login-container">
+        <h2>LOGIN</h2>
+        <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="POST">
+            <input type="text" name="username" placeholder="Username" required> <br>
+            <input type="password" name="password" placeholder="Password" required> <br>
+            <label for="captcha">CAPTCHA:</label><br>
+            <img src="<?php echo $_SERVER['PHP_SELF'] . '?captcha=1'; ?>" alt="CAPTCHA Image"><br>
+            <input type="text" name="captcha" placeholder="Inserisci il CAPTCHA" required> <br>
+            <button type="submit">Login</button>
+        </form>
+        <a href="#" class="forgot-password">Forgot your password?</a>
+    </div>
 </body>
 </html>
