@@ -87,6 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['posto'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="prenotazione.css"> 
     <title>Tabella di Prenotazione</title>
     <style>
         body {
@@ -154,7 +155,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['posto'])) {
     </style>
 </head>
 <body>
-
+    <header>
+        <div class="top-bar">
+            <div class="logo">
+                <img src="logo.png" alt="ZVOLTA Logo">
+            </div>
+            <nav>
+                <a href="./pagine/login.php" class="login-button">LOGIN</a>
+                <div class="user-icon">
+                    <img src="placeholder.png" alt="Foto">
+                </div>
+            </nav>
+        </div>
+    </header>
 <table>
     <tr>
         <th colspan="4">GROUP (A2)</th>

@@ -9,7 +9,6 @@ if (!isset($_SESSION['username'])) {
 }
 
 $username = $_SESSION['username'];
-//echo $_SESSION['prenOK'];
 
 // Recupero il ruolo dell'utente
 $query = "SELECT ruolo_utente FROM utente WHERE username = ?";
@@ -43,8 +42,6 @@ while ($row = $resultPrenotati->fetch_assoc()) {
 $prenotazioneSuccess = false;
 
 
-
-
 // Gestione della prenotazione
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['posto'])) {
     $posto = $_POST['posto'];
@@ -65,13 +62,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['posto'])) {
         
         if ($stmt->execute()) {
             $prenotazioneSuccess = true;
-            $_SESSION["prenOK"]=true;
             echo "<script>
                     document.getElementById('successMessage').style.display = 'block';
                     alert('Prenotazione effettuata con successo!');
                   </script>";
-            header("Location: ".$_SERVER['PHP_SELF']);
-            exit();
         } else {
             echo "<script>alert('Errore nella prenotazione: " . addslashes($conn->error) . "');</script>";
         }
@@ -80,11 +74,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['posto'])) {
     $stmt->close();
 }
 
+
+
+
 ?>
 
 <!DOCTYPE html>
 <html lang="it">
 <head>
+    <link rel="stylesheet" href="prenotazione.css"> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tabella di Prenotazione</title>
@@ -231,6 +229,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['posto'])) {
     </form>
 </div>
 
+<div id="successMessage">
+    <p>Prenotazione effettuata con successo!</p>
+</div>
 
 <?php
 if(isset($_SESSION['prenOK']) && $_SESSION['prenOK']==1) {
@@ -242,6 +243,8 @@ if(isset($_SESSION['prenOK']) && $_SESSION['prenOK']==1) {
 
 }
 ?>
+
+
 <script>
     function makeReservation(cell) {
         document.getElementById('reservationText').innerText = 'La tua prenotazione è ' + cell;
@@ -249,7 +252,6 @@ if(isset($_SESSION['prenOK']) && $_SESSION['prenOK']==1) {
         document.getElementById('message').style.display = 'block';
     }
 </script>
-
 
 
 </body>
