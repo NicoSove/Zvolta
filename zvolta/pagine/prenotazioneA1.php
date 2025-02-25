@@ -30,10 +30,15 @@ if ($row['ruolo_utente'] !== 'utente_base') {
     exit();
 }
 
-// Recupera tutte le prenotazioni
+// Recupera tutte le prenotazioni per il luogo specificato e per la data +1
 $prenotazioni = [];
-$queryPrenotati = "SELECT posto, username FROM prenotazione";
-$resultPrenotati = $conn->query($queryPrenotati);
+$nextDay = date('Y-m-d', strtotime('+1 day')); // Calcola la data di domani
+$queryPrenotati = "SELECT posto, username FROM prenotazione WHERE luogo = ? AND Data = ?";
+$stmt = $conn->prepare($queryPrenotati);
+$luogo = 'A1'; // Imposta il valore del luogo
+$stmt->bind_param("ss", $luogo, $nextDay);
+$stmt->execute();
+$resultPrenotati = $stmt->get_result();
 
 while ($row = $resultPrenotati->fetch_assoc()) {
     $prenotazioni[$row['posto']] = $row['username'];
@@ -41,31 +46,34 @@ while ($row = $resultPrenotati->fetch_assoc()) {
 
 $prenotazioneSuccess = false;
 
-
 // Gestione della prenotazione
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['posto'])) {
     $posto = $_POST['posto'];
+    $luogo = "A1"; // Imposta il valore del luogo
 
-    // Verifica se il posto è già prenotato
-    $stmt = $conn->prepare("SELECT * FROM prenotazione WHERE posto = ?");
-    $stmt->bind_param("s", $posto);
+    // Verifica se il posto è già prenotato per il luogo specificato e per la data +1
+    $stmt = $conn->prepare("SELECT * FROM prenotazione WHERE posto = ? AND luogo = ? AND Data = ?");
+    $stmt->bind_param("sss", $posto, $luogo, $nextDay);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        // Il posto è già prenotato
-        echo "<script>alert('Il posto $posto è già prenotato. Scegli un altro posto.');</script>";
+        // Il posto è già prenotato per il luogo specificato e per la data +1
+        echo "<script>alert('Il posto $posto nel luogo $luogo è già prenotato per il giorno successivo. Scegli un altro posto.');</script>";
     } else {
         // Inserisce la nuova prenotazione basata sull'ultimo click
-        $stmt = $conn->prepare("INSERT INTO prenotazione (Data, username, posto, contModifiche) VALUES (CURDATE() + INTERVAL 1 DAY, ?, ?, 0)");
-        $stmt->bind_param("ss", $username, $posto);
+        $stmt = $conn->prepare("INSERT INTO prenotazione (Data, username, posto, contModifiche, luogo) VALUES (?, ?, ?, 0, ?)");
+        $stmt->bind_param("ssss", $nextDay, $username, $posto, $luogo); // Aggiungi $luogo come parametro
         
         if ($stmt->execute()) {
             $prenotazioneSuccess = true;
+            $_SESSION["prenOK"] = true;
             echo "<script>
                     document.getElementById('successMessage').style.display = 'block';
                     alert('Prenotazione effettuata con successo!');
                   </script>";
+            header("Location: " . $_SERVER['PHP_SELF']);
+            exit();
         } else {
             echo "<script>alert('Errore nella prenotazione: " . addslashes($conn->error) . "');</script>";
         }
@@ -73,18 +81,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['posto'])) {
     
     $stmt->close();
 }
-
-
-
-
 ?>
 
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <link rel="stylesheet" href="prenotazione.css"> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="prenotazione.css"> 
     <title>Tabella di Prenotazione</title>
     <style>
         body {
@@ -152,8 +156,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['posto'])) {
     </style>
 </head>
 <body>
-
-<table>
+    <header>
+        <div class="top-bar">
+            <div class="logo">
+                <img src="logo.png" alt="ZVOLTA Logo">
+            </div>
+            <nav>
+                <a href="./pagine/login.php" class="login-button">LOGIN</a>
+                <div class="user-icon">
+                    <img src="placeholder.png" alt="Foto">
+                </div>
+            </nav>
+        </div>
+    </header>
+    <table>
     <tr>
         <th colspan="4">GROUP (A1)</th>
     </tr>
@@ -229,9 +245,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['posto'])) {
     </form>
 </div>
 
-<div id="successMessage">
-    <p>Prenotazione effettuata con successo!</p>
-</div>
 
 <?php
 if(isset($_SESSION['prenOK']) && $_SESSION['prenOK']==1) {
@@ -243,8 +256,6 @@ if(isset($_SESSION['prenOK']) && $_SESSION['prenOK']==1) {
 
 }
 ?>
-
-
 <script>
     function makeReservation(cell) {
         document.getElementById('reservationText').innerText = 'La tua prenotazione è ' + cell;
@@ -252,6 +263,7 @@ if(isset($_SESSION['prenOK']) && $_SESSION['prenOK']==1) {
         document.getElementById('message').style.display = 'block';
     }
 </script>
+
 
 
 </body>
