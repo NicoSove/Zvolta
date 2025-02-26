@@ -1,11 +1,81 @@
 /* Stili generali */
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Cambiato per allineare gli elementi in alto */
+    align-items: center;
+    height: 100vh;
+    margin: 0; /* Rimuove il margine predefinito */
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
     background: linear-gradient(to right, #061839, #35808b);
-    background-repeat: no-repeat;
-    background-size:100%;
+}
+
+table {
+    border-collapse: collapse;
+    width: 80%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    margin-top:10%;
+    border-radius:15px;
+    -webkit-border-radius:15px;
+    -moz-border-radius:15px;
+    -ms-border-radius:15px;
+    -o-border-radius:15px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.empty-row {
+    height: 20px;
+}
+
+#message {
+    margin-top: 20px;
+    display: none;
+    text-align: center;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#successMessage {
+    margin-top: 20px;
+    color: green;
+    font-size: 16px;
+    text-align: center;
+}
+
+td.prenotato-altri {
+    background-color: #ff4d4d !important;
+    color: white;
+    font-weight: bold;
+}
+
+td.prenotato-mio {
+    background-color: #4CAF50 !important;
+    color: white;
+    font-weight: bold;
 }
 
 /* Barra superiore */
@@ -16,6 +86,11 @@ body {
     background: #31808d;
     padding: 10px 20px;
     opacity: 0.9;
+    width: 100%; /* Assicurati che la barra superiore occupi tutta la larghezza */
+    position: fixed; /* Fissa la barra in cima alla pagina */
+    top: 0; /* Posiziona la barra in cima */
+    left: 0; /* Assicura che sia allineata a sinistra */
+    z-index: 1000; /* Assicura che sia sopra altri contenuti */
 }
 
 .logo img {
@@ -28,7 +103,7 @@ nav {
 }
 
 .login-button {
-    width:50%;
+    width: 50%;
     background: #002d74;
     color: white;
     padding: 10px 20px;
@@ -37,7 +112,7 @@ nav {
     font-weight: bold;
     margin-right: 25px;
     font-size: 10px;
-    letter-spacing:3px;
+    letter-spacing: 3px;
     text-align: center;
 }
 
@@ -56,8 +131,9 @@ nav {
 
 /* Sezione Hero */
 .hero {
-        position: relative;
+    position: relative;
     padding: 125px 20px;
+    margin-top: 60px; /* Aggiungi margine per evitare sovrapposizione con la barra superiore */
 }
 
 .hero-background {
@@ -75,28 +151,26 @@ nav {
     font-size: 90px;
     letter-spacing: 2px;
     margin-left: 280px;
-    
-    
 }
 
 .hero-content p {
     font-size: 1.6rem; 
     letter-spacing: 1px;
     margin-left: 280px;
-  
 }
 
-.hero-image{
-    position:relative;
+.hero-image {
+    position: relative;
     top: 5%;
 }
 
 /* Sezione pulsanti */
 .buttons-container {
     margin: auto;
-    width:50%;
-    margin-left:300px;
-    margin-top:30px;
+    width: 50%;
+    margin-top: 30px;
+    display: flex; /* Cambiato per utilizzare flexbox */
+    justify-content: space-around; /* Spaziatura uniforme tra i pulsanti */
 }
 
 .button {
@@ -109,14 +183,14 @@ nav {
     text-transform: uppercase;
     border-radius: 5px;
     transition: all 0.3s ease;
-    width:24%;
-    letter-spacing:2px;
+    width: 24%;
+    letter-spacing: 2px;
 }
 
-.divider{
-    width:3%;
-    height:auto;
-    display:inline-block;
+.divider {
+    width: 3%;
+    height: auto;
+    display: inline-block;
 }
 
 .button1 {
@@ -129,8 +203,8 @@ nav {
     text-transform: uppercase;
     border-radius: 5px;
     transition: all 0.3s ease;
-    width:24%;
-    letter-spacing:2px;
+    width: 24%;
+    letter-spacing: 2px;
 }
 
 .button:hover {

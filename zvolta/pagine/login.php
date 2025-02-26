@@ -76,7 +76,7 @@ if ($_POST) {
                 // Verifica se la password inserita corrisponde a quella memorizzata
                 if (password_verify($password, $pwddb)) {
                     $_SESSION["username"] = $username; // Memorizza l'username nella sessione
-                    header("Location: prova.php"); // Reindirizza alla pagina di prova
+                    header("Location: ../home.php"); // Reindirizza alla pagina di prova
                     exit(); // Termina lo script
                 } else {
                     echo "Password errata"; // Messaggio di errore se la password è errata

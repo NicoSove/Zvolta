@@ -92,68 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['posto'])) {
     <link rel="stylesheet" href="prenotazione.css"> 
     <title>Tabella di Prenotazione</title>
     <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f9f9f9;
-            font-family: Arial, sans-serif;
-        }
-        table {
-            border-collapse: collapse;
-            width: 80%;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: center;
-            cursor: pointer;
-        }
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .empty-row {
-            height: 20px;
-        }
-        #message {
-            margin-top: 20px;
-            display: none;
-            text-align: center;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        #successMessage {
-            /*display: <?= $prenotazioneSuccess ? 'block' : 'none' ?>;*/
-            margin-top: 20px;
-            color: green;
-            font-size: 16px;
-            text-align: center;
-        }
-        td.prenotato-altri {
-            background-color: #ff4d4d !important;
-            color: white;
-            font-weight: bold;
-        }
-        td.prenotato-mio {
-            background-color: #4CAF50 !important;
-            color: white;
-            font-weight: bold;
-        }
+        
     </style>
 </head>
 <body>
@@ -171,7 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['posto'])) {
         </div>
     </header>
 
-
+    
     <table>
     <tr>
         <th colspan="4">GROUP (A2)</th>

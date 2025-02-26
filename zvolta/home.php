@@ -1,3 +1,11 @@
+<?php
+session_start();
+include './pagine/connessione.php'; // Assicurati che questo file contenga la connessione al database
+
+// Controllo se l'utente è loggato
+$isLoggedIn = isset($_SESSION['username']);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,10 +21,13 @@
                 <img src="logo.png" alt="ZVOLTA Logo">
             </div>
             <nav>
-                <a href="./pagine/login.php" class="login-button">LOGIN</a>
+                <?php if ($isLoggedIn): ?>
+                    <a href="./pagine/logout.php" class="login-button">LOGOUT</a>
+                <?php else: ?>
+                    <a href="./pagine/login.php" class="login-button">LOGIN</a>
+                <?php endif; ?>
                 <div class="user-icon">
                     <img src="placeholder.png" alt="Foto">
-
                 </div>
             </nav>
         </div>
@@ -27,19 +38,15 @@
             <div class="hero-content">
                 <h1>ZVOLTA</h1>
                 <p>CONSULENCE AND ASSISTANCE</p>
-            
-                    
             </div>
-            
         </section>
-       
         
         <section class="buttons-container">
             <a href="#" class="button">SITO WEB AZIENDALE ></a>
-            <div class="divider"/> </div>
-            <a href="#" class="button">RESERVATIONS ></a><br><br>
+            <div class="divider"></div>
+            <a href="./pagine/prenotazioneA2.php" class="button">RESERVATIONS ></a><br><br>
             <a href="./extra/about.php" class="button1">WHAT ABOUT US? ></a>
-            <div class="divider"/></div>
+            <div class="divider"></div>
             <a href="#" class="button1">MANAGE ></a>
         </section>
     </main>
