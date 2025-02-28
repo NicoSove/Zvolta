@@ -1,0 +1,80 @@
+/*      uiverse.io    */
+body {
+    background: linear-gradient(to right, #061839, #35808b);
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    background: linear-gradient(to right, #2C2C54, #3B3B98);
+    padding: 50px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    color: white;
+    width: 400px;
+    position: static;
+}
+
+h2 {
+    font-size: 28px;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 90%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    background: #E0E0E0;
+    text-align: center;
+}
+
+button {
+    width: 60%;
+    padding: 10px;
+    background-color: #0f3c6b;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    margin-top: 25px;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.forgot-password {
+    color: #60A5FA;
+    text-decoration: none;
+    display: block;
+    margin-top: 15px;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.recaptcha-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.captcha {
+    margin-top:40%;
+    color:white;
+}
