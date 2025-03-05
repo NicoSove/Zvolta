@@ -33,6 +33,23 @@ $isLoggedIn = isset($_SESSION['username']);
             </nav>
         </div>
     </header>
+<h1> Prenotazioni</h1>
+<div class="cards">
+    <div class="card red" onclick="window.location='prenotazioneA1.php';">
+        <p class="tip">Prenotazione A1</p>
+        <p class="second-text"></p>
+        <img src= "../images/desk2.png">
+    </div>
+    <div class="card blue" onclick="window.location='prenotazioneA2.php';">
+        <p class="tip">Prenotazione A2</p>
+        <p class="second-text"></p>
+        <img src= "../images/desk1.png">
+    </div>
+    <div class="card green">
+        <p class="tip">Hover Me</p>
+        <p class="second-text"></p>
+    </div>
+</div>
 
 
 
