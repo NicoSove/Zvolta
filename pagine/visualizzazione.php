@@ -77,11 +77,21 @@ if (isset($_POST['modifica'])) {
     $stmt->execute();
     $resultControllo = $stmt->get_result();
 
+    // Controlla il numero di modifiche
+    $queryControlloModifiche = "SELECT contModifiche FROM prenotazione WHERE posto = ? AND username = ?";
+    $stmt = $conn->prepare($queryControlloModifiche);
+    $stmt->bind_param("ss", $posto, $username);
+    $stmt->execute();
+    $resultControlloModifiche = $stmt->get_result();
+    $rowControlloModifiche = $resultControlloModifiche->fetch_assoc();
+
     if ($resultControllo->num_rows > 0) {
         $messaggio = "Esiste già una prenotazione per questo posto e luogo nella nuova data.";
+    } elseif ($rowControlloModifiche['contModifiche'] >= 2) {
+        $messaggio = "Hai raggiunto il limite di modifiche per questa prenotazione.";
     } else {
         // Procedi con la modifica
-        $queryModifica = "UPDATE prenotazione SET Data = ?, contModifiche = contModifiche + 1 WHERE posto = ? AND username = ? AND contModifiche < 2";
+        $queryModifica = "UPDATE prenotazione SET Data = ?, contModifiche = contModifiche + 1 WHERE posto = ? AND username = ?";
         $stmt = $conn->prepare($queryModifica);
         $stmt->bind_param("sss", $nuovaData, $posto, $username);
         $stmt->execute();
@@ -94,7 +104,7 @@ if (isset($_POST['elimina'])) {
     $posto = $_POST['posto'];
 
     // Esegui la query per eliminare la prenotazione
-    $queryElimina = "DELETE FROM prenotazione WHERE posto = ? AND username = ?";
+    $queryElimina = " DELETE FROM prenotazione WHERE posto = ? AND username = ?";
     $stmt = $conn->prepare($queryElimina);
     $stmt->bind_param("ss", $posto, $username);
     $stmt->execute();
