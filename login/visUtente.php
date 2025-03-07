@@ -3,8 +3,9 @@ session_start();
 include '../pagine/connessione.php'; // Assicurati che questo file contenga la connessione al database
 
 // Controllo se l'utente è loggato
+$isLoggedIn = isset($_SESSION['username']);
 if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
+    header("Location: ../login/login.php");
     exit();
 }
 
@@ -80,32 +81,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
     </script>
 </head>
 <body>
-    <h1>Profilo Utente</h1>
-    <p><strong>Username:</strong> <?php echo htmlspecialchars($userData['username']); ?></p>
-    <p><strong>Nome:</strong> <?php echo htmlspecialchars($userData['nome_utente']); ?></p>
-    <p><strong>Cognome:</strong> <?php echo htmlspecialchars($userData['cognome_utente']); ?></p>
-    <p><strong>Email:</strong> <?php echo htmlspecialchars($userData['mail_utente']); ?></p>
+    <header>
+        <div class="top-bar">
+            <div class="logo">
+                <a href="../home.php">
+                <img src="../extra/logo.png" alt="ZVOLTA Logo">
+                </a>
+            </div>
+            <nav>
+                <div class="user-icon">
+                    <img src="placeholder.png" alt="Foto">
+                </div>
+                <?php if ($isLoggedIn): ?>
+                    <a href="../login/logout.php" class="login-button">LOGOUT</a>
+                <?php else: ?>
+                    <a href="../login/login.php" class="login-button">LOGIN</a>
+                <?php endif; ?>
+            </nav>
+        </div>
+    </header>
 
-    <?php if ($userData['ruolo_utente'] === 'utente_base'): ?>
-        <p><strong>ID Coordinatore:</strong> <?php echo htmlspecialchars($userData['ID_coordinatore']); ?></p>
-    <?php endif; ?>
-
-    <h2>Modifica Password</h2>
-    <button onclick="togglePasswordForm()">Cambia Password</button>
+    <h1>Profilo Utente</h1> <!-- Spostato fuori dal riquadro -->
     
-    <div id="changePasswordForm">
-        <form method="POST" action="">
-            <label for="old_password">Vecchia Password:</label>
-            <input type="password" name="old_password" required>
-            <br>
-            <label for="new_password">Nuova Password:</label>
-            <input type="password" name="new_password" required>
-            <br>
-            <label for="confirm_password">Conferma Nuova Password:</label>
-            <input type="password" name="confirm_password" required>
-            <br>
-            <button type="submit" name="change_password">Cambia Password</button>
-        </form>
+    <div class="user-data-container">
+        <div class="user-data">
+            <div class="user-icon">
+                <img src="../extra/placeholder.png" alt="Foto">
+            </div>
+            <div class="user-info">
+                <p><strong>Username:</strong> <?php echo htmlspecialchars($userData['username']); ?></p>
+                <p><strong>Nome:</strong> <?php echo htmlspecialchars($userData['nome_utente']); ?></p>
+                <p><strong>Cognome:</strong> <?php echo htmlspecialchars($userData['cognome_utente']); ?></p>
+                <p><strong>Email:</strong> <?php echo htmlspecialchars($userData['mail_utente']); ?></p>
+
+                <?php if ($userData['ruolo_utente'] === 'utente_base'): ?>
+                    <p><strong>ID Coordinatore:</strong> <?php echo htmlspecialchars($userData['ID_coordinatore']); ?></p>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <button onclick="togglePasswordForm()">Cambia Password</button>
+        
+        <div id="changePasswordForm">
+            <form method="POST" action="">
+                <label for="old_password">Vecchia Password:</label>
+                <input type="password" name="old_password" required>
+                <br>
+                <label for="new_password">Nuova Password:</label>
+                <input type="password" name="new_password" required>
+                <br>
+                <label for="confirm_password">Conferma Nuova Password:</label>
+                <input type="password" name="confirm_password" required>
+                <br>
+                <button type="submit" name="change_password">Cambia Password</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="home-button-container">
+        <a href="../home.php" class="home-button">Home</a>
     </div>
 </body>
 </html>
