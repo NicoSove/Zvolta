@@ -3,6 +3,9 @@ session_start();
 include 'connessione.php'; // Assicurati che questo file contenga la connessione al database
 
 // Controllo se l'utente è loggato
+$isLoggedIn = isset($_SESSION['username']);
+
+// Controllo se l'utente è loggato
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
@@ -42,7 +45,7 @@ if (isset($_POST['data'])) {
 $prenotazioni = [];
 
 // Query per il luogo A1
-$queryPrenotatiA1 = "SELECT posto, luogo, contModifiche FROM prenotazione WHERE luogo = ? AND Data = ? AND username = ?";
+$queryPrenotatiA1 = "SELECT posto, luogo, contModifiche, Data FROM prenotazione WHERE luogo = ? AND Data = ? AND username = ?";
 $stmt = $conn->prepare($queryPrenotatiA1);
 $luogoA1 = 'A1'; // Imposta il valore del luogo a A1
 $stmt->bind_param("sss", $luogoA1, $dataPrenotazione, $username);
@@ -54,7 +57,7 @@ while ($rowPrenotati = $resultPrenotatiA1->fetch_assoc()) {
 }
 
 // Query per il luogo A2
-$queryPrenotatiA2 = "SELECT posto, luogo, contModifiche FROM prenotazione WHERE luogo = ? AND Data = ? AND username = ?";
+$queryPrenotatiA2 = "SELECT posto, luogo, contModifiche, Data FROM prenotazione WHERE luogo = ? AND Data = ? AND username = ?";
 $stmt = $conn->prepare($queryPrenotatiA2);
 $luogoA2 = 'A2'; // Imposta il valore del luogo a A2
 $stmt->bind_param("sss", $luogoA2, $dataPrenotazione, $username);
@@ -70,32 +73,45 @@ if (isset($_POST['modifica'])) {
     $posto = $_POST['posto'];
     $nuovaData = $_POST['nuovaData'];
 
-    // Controlla se esiste già una prenotazione per il posto e il luogo nella nuova data
-    $queryControllo = "SELECT * FROM prenotazione WHERE posto = ? AND luogo = ? AND Data = ?";
-    $stmt = $conn->prepare($queryControllo);
-    $stmt->bind_param("sss", $posto, $luogoA1, $nuovaData); // Controlla per A1
-    $stmt->execute();
-    $resultControllo = $stmt->get_result();
+    error_log("Tentativo di modifica: posto = $posto, nuovaData = $nuovaData");
 
-    // Controlla il numero di modifiche
-    $queryControlloModifiche = "SELECT contModifiche FROM prenotazione WHERE posto = ? AND username = ?";
-    $stmt = $conn->prepare($queryControlloModifiche);
-    $stmt->bind_param("ss", $posto, $username);
-    $stmt->execute();
-    $resultControlloModifiche = $stmt->get_result();
-    $rowControlloModifiche = $resultControlloModifiche->fetch_assoc();
-
-    if ($resultControllo->num_rows > 0) {
-        $messaggio = "Esiste già una prenotazione per questo posto e luogo nella nuova data.";
-    } elseif ($rowControlloModifiche['contModifiche'] >= 2) {
-        $messaggio = "Hai raggiunto il limite di modifiche per questa prenotazione.";
+    // Controlla se la nuova data è valida (deve essere maggiore di oggi)
+    if ($nuovaData <= date('Y-m-d')) {
+        $messaggio = "Non puoi modificare la prenotazione per oggi o per una data passata.";
     } else {
-        // Procedi con la modifica
-        $queryModifica = "UPDATE prenotazione SET Data = ?, contModifiche = contModifiche + 1 WHERE posto = ? AND username = ?";
-        $stmt = $conn->prepare($queryModifica);
-        $stmt->bind_param("sss", $nuovaData, $posto, $username);
+        // Controlla se esiste già una prenotazione per il posto e il luogo nella nuova data
+        $queryControllo = "SELECT * FROM prenotazione WHERE posto = ? AND luogo = ? AND Data = ?";
+        $stmt = $conn->prepare($queryControllo);
+        $stmt->bind_param("sss", $posto, $luogoA1, $nuovaData);
         $stmt->execute();
-        $messaggio = "Prenotazione modificata con successo.";
+        $resultControllo = $stmt->get_result();
+
+        error_log("Risultati della query di controllo: " . $resultControllo->num_rows);
+
+        // Controlla il numero di modifiche
+        $queryControlloModifiche = "SELECT contModifiche FROM prenotazione WHERE posto = ? AND username = ?";
+        $stmt = $conn->prepare($queryControlloModifiche);
+        $stmt->bind_param("ss", $posto, $username);
+        $stmt->execute();
+        $resultControlloModifiche = $stmt->get_result();
+        $rowControlloModifiche = $resultControlloModifiche->fetch_assoc();
+
+        if ($resultControllo->num_rows > 0) {
+            $messaggio = "Esiste già una prenotazione per questo posto e luogo nella nuova data.";
+        } elseif ($rowControlloModifiche['contModifiche'] >= 2) {
+            $messaggio = "Hai raggiunto il limite di modifiche per questa prenotazione.";
+        } else {
+            // Procedi con la modifica
+            $queryModifica = "UPDATE prenotazione SET Data = ?, contModifiche = contModifiche + 1 WHERE posto = ? AND username = ?";
+            $stmt = $conn->prepare($queryModifica);
+            $stmt->bind_param("sss", $nuovaData, $posto, $username);
+            $stmt->execute();
+            $messaggio = "Prenotazione modificata con successo.";
+
+            // Reindirizza per visualizzare le prenotazioni aggiornate
+            header("Location: visualizzazione.php?data=" . urlencode($nuovaData));
+            exit();
+        }
     }
 }
 
@@ -104,17 +120,47 @@ if (isset($_POST['elimina'])) {
     $posto = $_POST['posto'];
 
     // Esegui la query per eliminare la prenotazione
-    $queryElimina = " DELETE FROM prenotazione WHERE posto = ? AND username = ?";
+    $queryElimina = "DELETE FROM prenotazione WHERE posto = ? AND username = ?";
     $stmt = $conn->prepare($queryElimina);
     $stmt->bind_param("ss", $posto, $username);
     $stmt->execute();
     $messaggio = "Prenotazione eliminata con successo.";
 }
 
+// Definisci la data di oggi
+$oggi = date('Y-m-d'); // Data di oggi
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - ZVOLTA</title>
+    <link rel="stylesheet" href="vis.css"> <!-- Collegamento al file CSS -->
+</head>
+<body>
+    <header>
+        <div class="top-bar">
+            <div class="logo">
+                <a href="home.php">
+                    <img src="../extra/logo.png" alt="ZVOLTA Logo">
+                </a>
+            </div>
+            <nav>
+                <?php if ($isLoggedIn): ?>
+                    <a href="../login/logout.php" class="login-button">LOGOUT</a>
+                <?php else: ?>
+                    <a href="../login/login.php" class="login-button">LOGIN</a>
+                <?php endif; ?>
+                <div class="user-icon">
+                    <img src="../extra/placeholder.png" alt="Foto">
+                </div>
+            </nav>
+        </div>
+    </header>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -139,28 +185,35 @@ if (isset($_POST['elimina'])) {
                 <tr>
                     <th>Posto</th>
                     <th>Luogo</th>
-                    <th>Modifica Data</th>
-                    <th>Elimina</th>
+                    <?php if (array_filter($prenotazioni, function($p) use ($oggi) { return $p['Data'] > $oggi; })) : ?>
+                        <th>Modifica Data</th>
+                        <th>Elimina</th>
+                    <?php endif; ?>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($prenotazioni as $prenotazione): ?>
+                <?php 
+                foreach ($prenotazioni as $prenotazione): 
+                    $dataPrenotazione = $prenotazione['Data']; // Data della prenotazione
+                ?>
                     <tr>
                         <td><?php echo htmlspecialchars($prenotazione['posto']); ?></td>
                         <td><?php echo htmlspecialchars($prenotazione['luogo']); ?></td>
-                        <td>
-                            <form method="post">
-                                <input type="hidden" name="posto" value="<?php echo htmlspecialchars($prenotazione['posto']); ?>">
-                                <input type="date" name="nuovaData" required>
-                                <button type="submit" name="modifica">Modifica</button>
-                            </form>
-                        </td>
-                        <td>
-                            <form method="post">
-                                <input type="hidden" name="posto" value="<?php echo htmlspecialchars($prenotazione['posto']); ?>">
-                                <button type="submit" name="elimina" onclick="return confirm('Sei sicuro di voler eliminare questa prenotazione?');">Elimina</button>
-                            </form>
-                        </td>
+                        <?php if ($dataPrenotazione > $oggi): // Controlla se la data è futura ?>
+                            <td>
+                                <form method="post">
+                                    <input type="hidden" name="posto" value="<?php echo htmlspecialchars($prenotazione['posto']); ?>">
+                                    <input type="date" name="nuovaData" required>
+                                    <button type="submit" name="modifica">Modifica</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form method="post">
+                                    <input type="hidden" name="posto" value="<?php echo htmlspecialchars($prenotazione['posto']); ?>">
+                                    <button type="submit" name="elimina" onclick="return confirm('Sei sicuro di voler eliminare questa prenotazione?');">Elimina</button>
+                                </form>
+                            </td>
+                        <?php endif; ?>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
