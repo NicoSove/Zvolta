@@ -113,14 +113,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
                 <p><strong>Nome:</strong> <?php echo htmlspecialchars($userData['nome_utente']); ?></p>
                 <p><strong>Cognome:</strong> <?php echo htmlspecialchars($userData['cognome_utente']); ?></p>
                 <p><strong>Email:</strong> <?php echo htmlspecialchars($userData['mail_utente']); ?></p>
+                <p><strong>Password: **********</strong></p>
+                <div class="matita">
+                    <img src="../images/pencil.png" onclick="togglePasswordForm()" style="width: 30px; height: auto;">
+                </div>
 
                 <?php if ($userData['ruolo_utente'] === 'utente_base'): ?>
                     <p><strong>ID Coordinatore:</strong> <?php echo htmlspecialchars($userData['ID_coordinatore']); ?></p>
                 <?php endif; ?>
             </div>
         </div>
-
-        <button onclick="togglePasswordForm()">Cambia Password</button>
         
         <div id="changePasswordForm">
             <form method="POST" action="">

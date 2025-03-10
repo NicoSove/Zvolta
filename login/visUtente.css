@@ -12,37 +12,19 @@ body {
 
 h1 {
     font-size: 40px; /* Dimensione del titolo principale */
+    margin-top: 20px; /* Aggiungi margine superiore */
     margin-bottom: 20px; /* Margine inferiore */
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 
 p {
     font-size: 18px; /* Dimensione del testo dei paragrafi */
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    margin: 5px 0; /* Margine superiore e inferiore */
+    margin: 2px 0; /* Margine superiore e inferiore */
 }
 
-button {
-    width: 200px; /* Larghezza fissa per il pulsante */
-    padding: 10px;
-    background-color: #0f3c6b;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    font-size: 18px;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
-    margin-top: 20px; /* Margine superiore */
-    margin-left:22px;
-    font-weight: bold;
-    
-}
 
-button:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
-}
 
 #changePasswordForm {
     background: linear-gradient(to right, #2C2C54, #3B3B98);
@@ -54,8 +36,8 @@ button:hover {
 }
 
 input[type="password"] {
-    width: 100%; /* Larghezza al 100% */
-    padding: 12px; /* Padding interno */
+    width: 80%; /* Larghezza al 100% */
+    padding:6px; /* Padding interno */
     margin: 10px 0; /* Margine superiore e inferiore */
     border: none; /* Rimuove il bordo */
     border-radius: 8px; /* Angoli arrotondati */
@@ -101,7 +83,7 @@ nav {
     border-radius: 20px;
     text-decoration: none;
     font-weight: bold;
-    margin-right: 10%;
+    margin-right: 20%;
     font-size: 10px;
     letter-spacing: 3px;
     text-align: center;
@@ -121,8 +103,8 @@ nav {
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5); /* Ombra per il riquadro */
     margin-top: 80px; /* Margine superiore per distanziare dalla barra superiore */
     width: 80%; /* Larghezza del riquadro */
-    height: 25%;
-    max-width: 600px; /* Larghezza massima */
+    height: 50%;
+    max-width: 900px; /* Larghezza massima */
     color: white; /* Colore del testo */
 }
 
@@ -167,10 +149,11 @@ nav {
     display: flex;
     justify-content: center; /* Centra il pulsante */
     margin-top: 50px; /* Margine superiore per distanziare dal riquadro */
+    position: absolute;
 }
 
 .home-button {
-    margin-left: 950px;
+    margin-left: 40%;
     background-color: #0f3c6b; /* Colore di sfondo */
     color: white; /* Colore del testo */
     padding: 15px 25px; /* Padding interno */
@@ -179,9 +162,16 @@ nav {
     font-size: 18px; /* Dimensione del font */
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     transition: background 0.3s, transform 0.2s; /* Transizione per hover */
+    position: absolute;
+
 }
 
 .home-button:hover {
     background-color: #0056b3; /* Colore di sfondo al passaggio del mouse */
     transform: scale(1.05); /* Effetto di ingrandimento al passaggio del mouse */
+}
+
+.matita {
+    position: absolute;
+    padding-right:2%;
 }

@@ -29,7 +29,9 @@ $isLoggedIn = isset($_SESSION['username']);
                     <a href="./login/login.php" class="login-button">LOGIN</a>
                 <?php endif; ?>
                 <div class="user-icon">
-                    <img src="./extra/placeholder.png" alt="Foto">
+                    <a href= "./login/visUtente.php">
+                        <img src="./extra/placeholder.png" alt="Foto">
+                    </a>
                 </div>
             </nav>
         </div>
@@ -49,7 +51,7 @@ $isLoggedIn = isset($_SESSION['username']);
             <a href="./pagine/prenotazione.php" class="button">RESERVATIONS ></a><br><br>
             <a href="./extra/about.php" class="button1">WHAT ABOUT US? ></a>
             <div class="divider"></div>
-            <a href="#" class="button1">MANAGE ></a>
+            <a href="" class="button1">MANAGE ></a>
         </section>
     </main>
     </div>
