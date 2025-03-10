@@ -51,7 +51,7 @@ $isLoggedIn = isset($_SESSION['username']);
             <a href="./pagine/prenotazione.php" class="button">RESERVATIONS ></a><br><br>
             <a href="./extra/about.php" class="button1">WHAT ABOUT US? ></a>
             <div class="divider"></div>
-            <a href="" class="button1">MANAGE ></a>
+            <a href="./pagine/visualizzazione.php" class="button1">MANAGE ></a>
         </section>
     </main>
     </div>

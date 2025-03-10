@@ -199,7 +199,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['posto'])) {
 if(isset($_SESSION['prenOK']) && $_SESSION['prenOK']==1) {
     //echo $_SESSION['prenOK'];
     echo "<div id='successMessage'>
-    <p>Prenotazione effettuata con successo!</p>
+    <strong>
+    <p>Prenotazione effettuata con successo!</p></strong>
     </div>";
     $_SESSION['prenOK']=0;
 

@@ -89,14 +89,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
                 </a>
             </div>
             <nav>
-                <div class="user-icon">
-                    <img src="placeholder.png" alt="Foto">
-                </div>
+                
                 <?php if ($isLoggedIn): ?>
                     <a href="../login/logout.php" class="login-button">LOGOUT</a>
                 <?php else: ?>
                     <a href="../login/login.php" class="login-button">LOGIN</a>
                 <?php endif; ?>
+                <div class="user-icon">
+                    <img src="../extra/placeholder.png" alt="Foto">
+                </div>
             </nav>
         </div>
     </header>
@@ -105,26 +106,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
     
     <div class="user-data-container">
         <div class="user-data">
-            <div class="user-icon">
-                <img src="../extra/placeholder.png" alt="Foto">
-            </div>
+                <img src="../extra/placeholder.png" alt="Foto" style="
+                        width: 300px;
+                        height: 300px;
+                        border-radius: 50%;
+                        background: white;
+                        "
+                        >
             <div class="user-info">
                 <p><strong>Username:</strong> <?php echo htmlspecialchars($userData['username']); ?></p>
                 <p><strong>Nome:</strong> <?php echo htmlspecialchars($userData['nome_utente']); ?></p>
                 <p><strong>Cognome:</strong> <?php echo htmlspecialchars($userData['cognome_utente']); ?></p>
-                <p><strong>Email:</strong> <?php echo htmlspecialchars($userData['mail_utente']); ?></p>
-                <p><strong>Password: **********</strong></p>
-                <div class="matita">
-                    <img src="../images/pencil.png" onclick="togglePasswordForm()" style="width: 30px; height: auto;">
-                </div>
-
-                <?php if ($userData['ruolo_utente'] === 'utente_base'): ?>
-                    <p><strong>ID Coordinatore:</strong> <?php echo htmlspecialchars($userData['ID_coordinatore']); ?></p>
-                <?php endif; ?>
-            </div>
-        </div>
-        
-        <div id="changePasswordForm">
+                <div id="changePasswordForm">
             <form method="POST" action="">
                 <label for="old_password">Vecchia Password:</label>
                 <input type="password" name="old_password" required>
@@ -138,6 +131,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
                 <button type="submit" name="change_password">Cambia Password</button>
             </form>
         </div>
+                <p><strong>Email:</strong> <?php echo htmlspecialchars($userData['mail_utente']); ?></p>
+                <?php if ($userData['ruolo_utente'] === 'utente_base'): ?>
+                    <p><strong>ID Coordinatore:</strong> <?php echo htmlspecialchars($userData['ID_coordinatore']); ?></p>
+                <?php endif; ?>
+                <div class="matita">
+                <p><strong>Password: **********</strong></p>
+                    <img src="../images/pencil.png" onclick="togglePasswordForm()" style="width: 30px; height: auto; padding-left: 270px; margin-bottom:30px">
+                </div>
+
+                
+            </div>
+        </div>
+        
+      
     </div>
 
     <div class="home-button-container">

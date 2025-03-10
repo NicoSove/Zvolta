@@ -4,7 +4,7 @@ include 'connessione.php'; // Assicurati che questo file contenga la connessione
 
 // Controllo se l'utente è loggato
 if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
+    header("Location: ../login/login.php");
     exit();
 }
 
@@ -103,21 +103,21 @@ function getClassePosto($posto, $prenotazioni, $username) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <title>Tabella di Prenotazione</title>
 </head>
-<body class="bg-gray-200 flex flex-col items-center justify-center min-h-screen">
+<body class="bg-gray-200 flex flex-col items-center">
     <header class="w-full bg-white shadow-md py-4 mb-8">
-        <div class="container mx-auto flex justify-between items-center px-4">
-            <div class="logo">
-                <a href="../home.php">
-                    <img src="../extra/logo.png" alt="ZVOLTA Logo" class="h-12">
-                </a>
-            </div>
-            <nav class="flex items-center">
-                <a href="../login/logout.php" class="login-button text-blue-500 font-bold mr-4">LOGOUT</a>
-                <div class="user-icon">
-                    <img src="../extra/placeholder.png" alt="Foto" class="h-10 w-10 rounded-full">
-                </div>
-            </nav>
+            <div class="container mx-auto flex justify-between items-center px-4">
+        <div class="logo">
+            <a href="../home.php">
+                <img src="../extra/logo.png" alt="ZVOLTA Logo" class="h-12 ml-0">
+            </a>
         </div>
+        <nav class="flex items-center">
+            <a href="../login/logout.php" class="login-button text-blue-500 font-bold mr-4">LOGOUT</a>
+            <div class="user-icon">
+                <img src="../extra/placeholder.png" alt="Foto" class="h-10 w-10 rounded-full">
+            </div>
+        </nav>
+    </div>
     </header>
 
     <div class="bg-gray-300 p-12 rounded-lg border-4 border-purple-300 w-3/4 lg:w-1/2">

@@ -28,7 +28,7 @@ $isLoggedIn = isset($_SESSION['username']);
                     <a href="../login/login.php" class="login-button">LOGIN</a>
                 <?php endif; ?>
                 <div class="user-icon">
-                    <img src="placeholder.png" alt="Foto">
+                    <img src="../extra/placeholder.png" alt="Foto">
                 </div>
             </nav>
         </div>
@@ -45,9 +45,10 @@ $isLoggedIn = isset($_SESSION['username']);
         <p class="second-text"></p>
         <img src= "../images/desk1.png">
     </div>
-    <div class="card green">
-        <p class="tip">Hover Me</p>
+    <div class="card green" onclick="window.location='prenotazioneMR.php';">
+        <p class="tip">Meeting Room</p>
         <p class="second-text"></p>
+        <img src= "../images/meeting.png">
     </div>
 </div>
 

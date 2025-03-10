@@ -1,11 +1,12 @@
 /* Stili generali */
 body {
+    margin-top: 0;
+    padding-top: 60px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start; /* Cambiato per allineare gli elementi in alto */
     align-items: center;
-    height: 100vh;
-    margin: 0; /* Rimuove il margine predefinito */
+    height: 100vh; /* Rimuove il margine predefinito */
     background-color: #f9f9f9;
     font-family: Arial, sans-serif;
     background: linear-gradient(to right, #061839, #35808b);
@@ -82,14 +83,15 @@ td.prenotato-mio {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #31808d;
+    background: #31808d; 
     padding: 10px 20px;
     opacity: 0.9;
-    width: 100%; /* Assicurati che la barra superiore occupi tutta la larghezza */
-    position: fixed; /* Fissa la barra in cima alla pagina */
-    top: 0; /* Posiziona la barra in cima */
-    left: 0; /* Assicura che sia allineata a sinistra */
-    z-index: 1000; /* Assicura che sia sopra altri contenuti */
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999; /* Ensure it's above all other content */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional: Adds a shadow for better visibility */
 }
 
 .logo img {
@@ -100,26 +102,6 @@ td.prenotato-mio {
 nav {
     display: flex;
     align-items: center;
-}
-
-.login-button {
-    width: 50%;
-    background: #002d74;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 20px;
-    text-decoration: none;
-    font-weight: bold;
-    margin-right: 10%;
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-align: center;
-}
-
-.login-button:hover {
-    background: #0048bf;
-    background-color: #0056b3;
-    transform: scale(1.04);
 }
 
 .user-icon img {
@@ -133,7 +115,7 @@ nav {
 .hero {
     position: relative;
     padding: 125px 20px;
-    margin-top: 60px; /* Aggiungi margine per evitare sovrapposizione con la barra superiore */
+    margin-top: 80px; /* Aggiungi margine per evitare sovrapposizione con la barra superiore */
 }
 
 .hero-background {

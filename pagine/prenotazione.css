@@ -42,7 +42,8 @@ th {
 
 #message {
     margin-top: 20px;
-    display: none;
+    color: rgb(255, 255, 255);
+    font-size: 20px;
     text-align: center;
 }
 
@@ -61,8 +62,8 @@ button:hover {
 
 #successMessage {
     margin-top: 20px;
-    color: green;
-    font-size: 16px;
+    color: rgb(255, 255, 255);
+    font-size: 20px;
     text-align: center;
 }
 
@@ -104,16 +105,16 @@ nav {
 }
 
 .login-button {
-    width: 50%;
+    width:50%;
     background: #002d74;
     color: white;
     padding: 10px 20px;
     border-radius: 20px;
     text-decoration: none;
     font-weight: bold;
-    margin-right: 10%;
+    margin-right: 25px;
     font-size: 10px;
-    letter-spacing: 3px;
+    letter-spacing:3px;
     text-align: center;
 }
 
@@ -128,6 +129,7 @@ nav {
     height: 40px;
     border-radius: 50%;
     background: white;
+    margin-right:40px;
 }
 
 /* Sezione Hero */
@@ -288,4 +290,11 @@ nav {
     font-family:Verdana, Geneva, Tahoma, sans-serif
     
 
+  }
+
+  .selectedPosto{
+    margin-top: 20px;
+    color: rgb(255, 255, 255);
+    font-size: 20px;
+    text-align: center;
   }

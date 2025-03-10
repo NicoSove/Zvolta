@@ -124,7 +124,7 @@ if (isset($_POST['elimina'])) {
     $stmt = $conn->prepare($queryElimina);
     $stmt->bind_param("ss", $posto, $username);
     $stmt->execute();
-    $messaggio = "Prenotazione eliminata con successo.";
+    $messaggio = 'Prenotazione eliminata con successo.';
 }
 
 // Definisci la data di oggi
@@ -144,7 +144,7 @@ $oggi = date('Y-m-d'); // Data di oggi
     <header>
         <div class="top-bar">
             <div class="logo">
-                <a href="home.php">
+                <a href="../home.php">
                     <img src="../extra/logo.png" alt="ZVOLTA Logo">
                 </a>
             </div>
@@ -167,6 +167,7 @@ $oggi = date('Y-m-d'); // Data di oggi
     <title>Le tue prenotazioni</title>
 </head>
 <body>
+<div class="headers">
     <h1>Prenotazioni per la data selezionata (<?php echo htmlspecialchars($dataPrenotazione); ?>)</h1>
     
     <form method="post">
@@ -174,7 +175,7 @@ $oggi = date('Y-m-d'); // Data di oggi
         <input type="date" id="data" name="data" value="<?php echo htmlspecialchars($dataPrenotazione); ?>" required>
         <button type="submit">Visualizza Prenotazioni</button>
     </form> <br>
-
+</div>
     <?php if (isset($messaggio)): ?>
         <p><?php echo htmlspecialchars($messaggio); ?></p>
     <?php endif; ?>
@@ -219,7 +220,9 @@ $oggi = date('Y-m-d'); // Data di oggi
             </tbody>
         </table>
     <?php else: ?>
+        <div class="headers">
         <p>Non ci sono prenotazioni per la data selezionata.</p>
+        </div>
     <?php endif; ?>
     
 </body>

@@ -9,6 +9,12 @@ body {
     background-size: 100%;
 }
 
+.headers{
+    align-items: center;
+    color: white;
+    padding-left:30%;
+}
+
 /* Barra superiore */
 .top-bar {
     display: flex;
@@ -18,6 +24,7 @@ body {
     padding: 10px 20px;
     margin-top: 0%;
     opacity: 0.9;
+    position:sticky;
 }
 
 .logo img {
@@ -54,7 +61,7 @@ th {
 }
 
 .login-button {
-    width: 50%;
+    width:50%;
     background: #002d74;
     color: white;
     padding: 10px 20px;
@@ -63,7 +70,7 @@ th {
     font-weight: bold;
     margin-right: 25px;
     font-size: 10px;
-    letter-spacing: 3px;
+    letter-spacing:3px;
     text-align: center;
 }
 
@@ -78,42 +85,5 @@ th {
     height: 40px;
     border-radius: 50%;
     background: white;
-}
-
-button {
-    --green: #1BFD9C;
-    font-size: 12px; /* Riduci la dimensione del font */
-    padding: 0.5em 1.5em; /* Riduci il padding */
-    letter-spacing: 0.06em;
-    position: relative;
-    font-family: inherit;
-    border-radius: 0.4em; /* Riduci il raggio di curvatura */
-    overflow: hidden;
-    transition: all 0.3s;
-    line-height: 1.2em; /* Riduci l'altezza della linea */
-    border: 2px solid var(--green);
-    background: linear-gradient(to right, rgba(27, 253, 156, 0.1) 1%, transparent 40%, transparent 60%, rgba(27, 253, 156, 0.1) 100%);
-    color: var(--green);
-    box-shadow: inset 0 0 10px rgba(27, 253, 156, 0.4), 0 0 9px 3px rgba(27, 253, 156, 0.1);
-}
-
-button:hover {
-    color: #82ffc9;
-    box-shadow: inset 0 0 10px rgba(27, 253, 156, 0.6), 0 0 9px 3px rgba(27, 253, 156, 0.2);
-}
-
-button:before {
-    content: "";
-    position: absolute;
-    left: -4em;
-    width: 4em;
-    height: 100%;
-    top: 0;
-    transition: transform .4s ease-in-out;
-    background: linear-gradient(to right, transparent 1%, rgba(27, 253, 156, 0.1) 40%, rgba(27, 253, 156, 0.1) 60%, transparent 100%);
-}
-
-button:hover:before {
-    transform: translateX(15em);
 }
 

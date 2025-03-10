@@ -5,34 +5,36 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column; /* Aggiunto per disporre gli elementi in colonna */
-    height: 100vh;
+    height: 70vh;
     margin: 0;
     color: white; /* Colore del testo per il corpo */
 }
 
 h1 {
-    font-size: 40px; /* Dimensione del titolo principale */
-    margin-top: 20px; /* Aggiungi margine superiore */
-    margin-bottom: 20px; /* Margine inferiore */
+    font-size: 40px; /* Dimensione del titolo principale *//* Aggiungi margine superiore */
+    margin-bottom: 4px; /* Margine inferiore */
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 
 p {
-    font-size: 18px; /* Dimensione del testo dei paragrafi */
+    font-size: 15px; /* Dimensione del testo dei paragrafi */
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    margin: 2px 0; /* Margine superiore e inferiore */
+    margin: 5px 0; /* Margine superiore e inferiore */
 }
 
 
 
 #changePasswordForm {
     background: linear-gradient(to right, #2C2C54, #3B3B98);
+    margin-left:15%;
+    margin-bottom:300px;
     padding: 20px; /* Padding per il modulo di modifica password */
     border-radius: 15px; /* Angoli arrotondati */
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5); /* Ombra per il modulo */
-    margin-top: 20px; /* Margine superiore */
-    display: none; /* Nascondi il modulo di modifica password di default */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5); /* Ombra per il modulo */ /* Margine superiore */
+    display: none;
+    z-index:1000;
+    position: absolute; /* Nascondi il modulo di modifica password di default */
 }
 
 input[type="password"] {
@@ -76,16 +78,16 @@ nav {
 }
 
 .login-button {
-    width: 50%;
+    width:50%;
     background: #002d74;
     color: white;
     padding: 10px 20px;
     border-radius: 20px;
     text-decoration: none;
     font-weight: bold;
-    margin-right: 20%;
+    margin-right: 25px;
     font-size: 10px;
-    letter-spacing: 3px;
+    letter-spacing:3px;
     text-align: center;
 }
 
@@ -101,24 +103,22 @@ nav {
     padding: 20px; /* Padding per il riquadro */
     border-radius: 15px; /* Angoli arrotondati */
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5); /* Ombra per il riquadro */
-    margin-top: 80px; /* Margine superiore per distanziare dalla barra superiore */
+    margin-top: 5px; /* Margine superiore per distanziare dalla barra superiore */
     width: 80%; /* Larghezza del riquadro */
-    height: 50%;
+    height: 36%;
     max-width: 900px; /* Larghezza massima */
     color: white; /* Colore del testo */
 }
 
-.user-icon {
-    margin-left: 60px; /* Spazio tra l'icona e il resto del contenuto */
-}
 
 .user-icon img {
-    width: 120px;
-    height: 120px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: white;
-    margin-right: 100px; /* Spazio a destra dell'icona */
+    margin-right:40px;
 }
+
 
 .top-bar {
     display: flex;
@@ -141,14 +141,14 @@ nav {
 }
 
 .user-info {
-    margin-right: 10px;
+    padding-left:50px;
     margin-top: 20px /* Spazio tra l'icona e i dati */
 }
 
 .home-button-container {
     display: flex;
     justify-content: center; /* Centra il pulsante */
-    margin-top: 50px; /* Margine superiore per distanziare dal riquadro */
+    margin-top: 40%; /* Margine superiore per distanziare dal riquadro */
     position: absolute;
 }
 
@@ -163,6 +163,7 @@ nav {
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     transition: background 0.3s, transform 0.2s; /* Transizione per hover */
     position: absolute;
+    z-index: 500;
 
 }
 
@@ -171,7 +172,6 @@ nav {
     transform: scale(1.05); /* Effetto di ingrandimento al passaggio del mouse */
 }
 
-.matita {
+.matita img{
     position: absolute;
-    padding-right:2%;
 }
