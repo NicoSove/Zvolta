@@ -105,7 +105,7 @@ nav {
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5); /* Ombra per il riquadro */
     margin-top: 5px; /* Margine superiore per distanziare dalla barra superiore */
     width: 80%; /* Larghezza del riquadro */
-    height: 36%;
+    height: 45%;
     max-width: 900px; /* Larghezza massima */
     color: white; /* Colore del testo */
 }
