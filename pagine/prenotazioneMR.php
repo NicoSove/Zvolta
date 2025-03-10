@@ -1,9 +1,99 @@
 <?php
 session_start();
-include './connessione.php'; // Assicurati che questo file contenga la connessione al database
+include 'connessione.php'; // Assicurati che questo file contenga la connessione al database
 
 // Controllo se l'utente è loggato
-$isLoggedIn = isset($_SESSION['username']);
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$username = $_SESSION['username'];
+
+// Recupero il ruolo dell'utente
+$query = "SELECT ruolo_utente FROM utente WHERE username = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    header("Location: login.php");
+    exit();
+}
+
+$row = $result->fetch_assoc();
+
+// Se il ruolo non è 'utente_base', reindirizza
+if ($row['ruolo_utente'] !== 'utente_base') {
+    header("Location: login.php");
+    exit();
+}
+
+// Recupera tutte le prenotazioni per il luogo specificato e per la data +1
+$prenotazioni = [];
+$nextDay = date('Y-m-d', strtotime('+1 day')); // Calcola la data di domani
+$queryPrenotati = "SELECT posto, username FROM prenotazione WHERE luogo = ? AND Data = ?";
+$stmt = $conn->prepare($queryPrenotati);
+$luogo = 'MR'; // Imposta il valore del luogo
+$stmt->bind_param("ss", $luogo, $nextDay);
+$stmt->execute();
+$resultPrenotati = $stmt->get_result();
+
+while ($row = $resultPrenotati->fetch_assoc()) {
+    $prenotazioni[$row['posto']] = $row['username'];
+}
+
+$prenotazioneSuccess = false;
+
+// Gestione della prenotazione
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['posto'])) {
+    $posto = $_POST['posto'];
+    $luogo = "MR"; // Imposta il valore del luogo
+
+    // Verifica se il posto è già prenotato per il luogo specificato e per la data +1
+    $stmt = $conn->prepare("SELECT * FROM prenotazione WHERE posto = ? AND luogo = ? AND Data = ?");
+    $stmt->bind_param("sss", $posto, $luogo, $nextDay);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        // Il posto è già prenotato per il luogo specificato e per la data +1
+        echo "<script>alert('Il posto $posto nel luogo $luogo è già prenotato per il giorno successivo. Scegli un altro posto.');</script>";
+    } else {
+        // Inserisce la nuova prenotazione basata sull'ultimo click
+        $stmt = $conn->prepare("INSERT INTO prenotazione (Data, username, posto, contModifiche, luogo) VALUES (?, ?, ?, 0, ?)");
+        $stmt->bind_param("ssss", $nextDay, $username, $posto, $luogo); // Aggiungi $luogo come parametro
+        
+        if ($stmt->execute()) {
+            $prenotazioneSuccess = true;
+            $_SESSION["prenOK"] = true;
+            echo "<script>
+                    document.getElementById('successMessage').style.display = 'block';
+                    alert('Prenotazione effettuata con successo!');
+                  </script>";
+            header("Location: " . $_SERVER['PHP_SELF']);
+            exit();
+        } else {
+            echo "<script>alert('Errore nella prenotazione: " . addslashes($conn->error) . "');</script>";
+        }
+    }
+    
+    $stmt->close();
+}
+
+// Funzione per determinare la classe del posto
+function getClassePosto($posto, $prenotazioni, $username) {
+    if (isset($prenotazioni[$posto])) {
+        if ($prenotazioni[$posto] === $username) {
+            return 'bg-blue-600'; // Posto prenotato dall'utente
+        } else {
+            return 'bg-red-400'; // Posto prenotato da altri
+        }
+    } else {
+        return 'bg-teal-600'; // Posto libero
+    }
+}
 ?>
 <html lang="it">
 <head>
@@ -22,11 +112,7 @@ $isLoggedIn = isset($_SESSION['username']);
                 </a>
             </div>
             <nav class="flex items-center">
-                <?php if ($isLoggedIn): ?>
-                    <a href="../login/logout.php" class="login-button text-blue-500 font-bold mr-4">LOGOUT</a>
-                <?php else: ?>
-                    <a href="../login/login.php" class="login-button text-blue-500 font-bold mr-4">LOGIN</a>
-                <?php endif; ?>
+                <a href="../login/logout.php" class="login-button text-blue-500 font-bold mr-4">LOGOUT</a>
                 <div class="user-icon">
                     <img src="../extra/placeholder.png" alt="Foto" class="h-10 w-10 rounded-full">
                 </div>
@@ -37,27 +123,27 @@ $isLoggedIn = isset($_SESSION['username']);
     <div class="bg-gray-300 p-12 rounded-lg border-4 border-purple-300 w-3/4 lg:w-1/2">
         <div class="flex justify-around mb-12 space-x-8">
             <div class="text-center">
-                <div class="bg-teal-600 w-32 h-40 rounded-lg mb-2" onclick="makeReservation('C1')"></div>
+                <div class="<?= getClassePosto('MR1', $prenotazioni, $username) ?> w-32 h-40 rounded-lg mb-2" onclick="makeReservation('MR1')"></div>
                 <p class="font-bold">MR 1</p>
                 <i class="fas fa-info-circle"></i>
             </div>
             <div class="text-center">
-                <div class="bg-red-400 w-32 h-40 rounded-lg mb-2" onclick="makeReservation('C2')"></div>
+                <div class="<?= getClassePosto('MR2', $prenotazioni, $username) ?> w-32 h-40 rounded-lg mb-2" onclick="makeReservation('MR2')"></div>
                 <p class="font-bold">MR 2</p>
                 <i class="fas fa-info-circle"></i>
             </div>
             <div class="text-center">
-                <div class="bg-teal-600 w-32 h-40 rounded-lg mb-2" onclick="makeReservation('C3')"></div>
-                <p class="font-bold">MR 3</p>
+                <div class="<?= getClassePosto('MR3', $prenotazioni, $username) ?> w-32 h-40 rounded-lg mb-2" onclick="makeReservation('MR3')"></div>
+                <p class="font-bold">MR 3</ p>
                 <i class="fas fa-info-circle"></i>
             </div>
             <div class="text-center">
-                <div class="bg-blue-600 w-32 h-40 rounded-lg mb-2" onclick="makeReservation('C4')"></div>
+                <div class="<?= getClassePosto('MR4', $prenotazioni, $username) ?> w-32 h-40 rounded-lg mb-2" onclick="makeReservation('MR4')"></div>
                 <p class="font-bold">MR 4</p>
                 <i class="fas fa-info-circle"></i>
             </div>
             <div class="text-center">
-                <div class="bg-blue-600 w-32 h-40 rounded-lg mb-2" onclick="makeReservation('C5')"></div>
+                <div class="<?= getClassePosto('MR5', $prenotazioni, $username) ?> w-32 h-40 rounded-lg mb-2" onclick="makeReservation('MR5')"></div>
                 <p class="font-bold">MR 5</p>
                 <i class="fas fa-info-circle"></i>
             </div>
