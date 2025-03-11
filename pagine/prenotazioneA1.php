@@ -184,7 +184,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['posto'])) {
     <p id="reservationText"></p>
     <form method="POST">
         <input type="hidden" id="selectedPosto" name="posto">
-        <button type="submit">Invia</button>
+        <button type="submit" id="submitButton" style="display: none; ">Invia</button>
     </form>
 </div>
 
@@ -201,10 +201,11 @@ if(isset($_SESSION['prenOK']) && $_SESSION['prenOK']==1) {
 ?>
 <script>
     function makeReservation(cell) {
-        document.getElementById('reservationText').innerText = 'La tua prenotazione è ' + cell;
-        document.getElementById('selectedPosto').value = cell;
-        document.getElementById('message').style.display = 'block';
-    }
+    document.getElementById('reservationText').innerText = 'La tua prenotazione è ' + cell;
+    document.getElementById('selectedPosto').value = cell;
+    document.getElementById('message').style.display = 'block';
+    document.getElementById('submitButton').style.display = 'block'; // Mostra il bottone di invio
+}
 </script>
 
 

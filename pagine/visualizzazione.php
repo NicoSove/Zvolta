@@ -68,6 +68,21 @@ while ($rowPrenotati = $resultPrenotatiA2->fetch_assoc()) {
     $prenotazioni[] = $rowPrenotati; // Aggiungi le prenotazioni di A2
 }
 
+
+// Query per il luogo MR
+$queryPrenotatiMR = "SELECT posto, luogo, contModifiche, Data FROM prenotazione WHERE luogo = ? AND Data = ? AND username = ?";
+$stmt = $conn->prepare($queryPrenotatiA2);
+$luogoMR = 'MR'; // Imposta il valore del luogo a A2
+$stmt->bind_param("sss", $luogoMR, $dataPrenotazione, $username);
+$stmt->execute();
+$resultPrenotatiA2 = $stmt->get_result();
+
+while ($rowPrenotati = $resultPrenotatiA2->fetch_assoc()) {
+    $prenotazioni[] = $rowPrenotati; // Aggiungi le prenotazioni di A2
+}
+
+
+
 // Gestione della modifica della prenotazione
 if (isset($_POST['modifica'])) {
     $posto = $_POST['posto'];
