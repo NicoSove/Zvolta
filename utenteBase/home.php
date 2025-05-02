@@ -30,7 +30,7 @@ $isLoggedIn = isset($_SESSION['username']);
                 <?php endif; ?>
                 <div class="user-icon">
                     <a href= "./utenteBase/login/visUtente.php">
-                        <img src="./extra/placeholder.png" alt="Foto">
+                        <img src="./utenteBase/extra/placeholder.png" alt="Foto">
                     </a>
                 </div>
             </nav>
