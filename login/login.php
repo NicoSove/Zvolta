@@ -27,7 +27,7 @@ function createCaptchaImage($captcha) {
     // Riempie lo sfondo dell'immagine
     imagefill($image, 0, 0, $backgroundColor);
 
-    // Aggiunge del rumore (linee) all'immagine per rendere il CAPTCHA più difficile da decifrare
+    // Aggiunge delle linee all'immagine per rendere il CAPTCHA più difficile da decifrare
     for ($i = 0; $i < 8; $i++) { // Aumenta il numero di linee
         imagesetthickness($image, 2.3); // Imposta lo spessore della linea (più sottile)
         imageline($image, rand(0, $width), rand(0, $height), rand(0, $width), rand(0, $height), $lineColor); // Disegna la linea
@@ -76,7 +76,26 @@ if ($_POST) {
                 // Verifica se la password inserita corrisponde a quella memorizzata
                 if (password_verify($password, $pwddb)) {
                     $_SESSION["username"] = $username; // Memorizza l'username nella sessione
-                    header("Location: ../home.php"); // Reindirizza alla pagina di prova
+
+                    // Recupero il ruolo dell'utente per il redirect
+                    $stmtRole = $conn->prepare("SELECT ruolo_utente FROM utente WHERE username = ?");
+                    $stmtRole->bind_param("s", $username);
+                    $stmtRole->execute();
+                    $resultRole = $stmtRole->get_result();
+                    $rowRole = $resultRole->fetch_assoc();
+                    $ruoloUtente = $rowRole['ruolo_utente'];
+
+                    // Redirect in base al ruolo
+                    if ($ruoloUtente === 'utente_base') {
+                        header("Location: ../utenteBase/home.php");
+                    } elseif ($ruoloUtente === 'manager') {
+                        header("Location: ../manager/home.php");
+                    } elseif ($ruoloUtente === 'coordinatore') {
+                        header("Location: ../coordinatore/home.php");
+                    } else {
+                        // Default redirect se ruolo non riconosciuto
+                        header("Location: ../home.php");
+                    }
                     exit(); // Termina lo script
                 } else {
                     echo '<div class="captcha">Password errata</div>'; // Messaggio di errore se la password è errata
@@ -129,7 +148,29 @@ if (isset($_GET['captcha']) && $_GET['captcha'] == 1) {
 
             
         </form>
-        <a href="#" class="forgot-password">Forgot your password?</a>
+        <a href="#" class="forgot-password" onclick="openMailApp(event)">Forgot your password?</a>
+        <script>
+            // Funzione per aprire l'app di posta predefinita con solo l'indirizzo email del manager
+            function openMailApp(event) {
+                event.preventDefault();
+                // Recupera l'email del manager tramite fetch
+                fetch('forgot_password.php')
+                    .then(response => response.text())
+                    .then(email => {
+                        if(email.includes('Email inviata al manager:')) {
+                            // Estrae l'email dal messaggio
+                            const emailAddress = email.replace('Email inviata al manager: ', '').trim();
+                            // Costruisce il link mailto senza subject e body
+                            const mailtoLink = `mailto:${emailAddress}`;
+                            // Apre il client di posta predefinito
+                            window.location.href = mailtoLink;
+                        } else {
+                            alert(email);
+                        }
+                    })
+                    .catch(error => alert('Errore nella richiesta: ' + error));
+            }
+        </script>
     </div>
     
 

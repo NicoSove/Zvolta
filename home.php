@@ -19,17 +19,17 @@ $isLoggedIn = isset($_SESSION['username']);
         <div class="top-bar">
             <div class="logo">
                 <a href="home.php">
-                    <img src="./utenteBase/extra/logo.png" alt="ZVOLTA Logo">
+                    <img src="./extra/logo.png" alt="ZVOLTA Logo">
                 </a>
             </div>
             <nav>
                 <?php if ($isLoggedIn): ?>
-                    <a href="./utenteBase/login/logout.php" class="login-button">LOGOUT</a>
+                    <a href="./login/logout.php" class="login-button">LOGOUT</a>
                 <?php else: ?>
-                    <a href="./utenteBase/login/login.php" class="login-button">LOGIN</a>
+                    <a href="./login/login.php" class="login-button">LOGIN</a>
                 <?php endif; ?>
                 <div class="user-icon">
-                    <a href= "./utenteBase/login/visUtente.php">
+                    <a href= "./login/visUtente.php">
                         <img src="./extra/placeholder.png" alt="Foto">
                     </a>
                 </div>
