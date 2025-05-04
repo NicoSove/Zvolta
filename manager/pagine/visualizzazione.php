@@ -1,244 +1,358 @@
 <?php
 session_start();
-include 'connessione.php'; // Assicurati che questo file contenga la connessione al database
-
-// Controllo se l'utente è loggato
+include 'connessione.php';
 $isLoggedIn = isset($_SESSION['username']);
 
-// Controllo se l'utente è loggato
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
 
 $username = $_SESSION['username'];
-
-// Recupero il ruolo dell'utente
-$query = "SELECT ruolo_utente FROM utente WHERE username = ?";
+$query = "SELECT ID_coordinatore, ruolo_utente FROM utente WHERE username = ?";
 $stmt = $conn->prepare($query);
+if (!$stmt) die("Errore prepare: " . $conn->error);
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
-
 if ($result->num_rows === 0) {
     header("Location: login.php");
     exit();
 }
 
 $row = $result->fetch_assoc();
+$ruolo = $row['ruolo_utente'];
+$ID_coordinatore = $row['ID_coordinatore'];
 
-// Se il ruolo non è 'utente_base', reindirizza
-if ($row['ruolo_utente'] !== 'utente_base') {
+// Se l'utente non è admin redirigi al login
+if ($ruolo !== 'admin') {
     header("Location: login.php");
     exit();
 }
 
-// Imposta la data di default a oggi
-$dataPrenotazione = date('Y-m-d');
+$dataPrenotazione = isset($_POST['data']) ? $_POST['data'] : date('Y-m-d');
 
-// Controlla se è stata inviata una data
-if (isset($_POST['data'])) {
-    $dataPrenotazione = $_POST['data'];
+// Per l'admin, mostra tutte le prenotazioni divise per ruolo utente
+if ($ruolo === 'admin') {
+    // Prendi tutti gli username dei coordinatori
+    $queryCoordinatori = "SELECT username FROM utente WHERE ruolo_utente = 'coordinatore'";
+    $resultCoordinatori = $conn->query($queryCoordinatori);
+    $coordinatori = [];
+    while ($rowC = $resultCoordinatori->fetch_assoc()) {
+        $coordinatori[] = $rowC['username'];
+    }
+
+    // Prendi tutti gli username degli utenti base
+    $queryUtentiBase = "SELECT username FROM utente WHERE ruolo_utente = 'utente_base'";
+    $resultUtentiBase = $conn->query($queryUtentiBase);
+    $utentiBase = [];
+    while ($rowB = $resultUtentiBase->fetch_assoc()) {
+        $utentiBase[] = $rowB['username'];
+    }
+
+    // Funzione per ottenere prenotazioni per un array di username
+    function getPrenotazioniByUsernames($conn, $usernames, $dataPrenotazione) {
+        if (count($usernames) === 0) return [];
+        $placeholders = implode(',', array_fill(0, count($usernames), '?'));
+        $query = "SELECT posto, luogo, contModifiche, Data, username FROM prenotazione WHERE Data = ? AND username IN ($placeholders)";
+        $stmt = $conn->prepare($query);
+        $types = str_repeat('s', count($usernames) + 1);
+        $params = array_merge([$dataPrenotazione], $usernames);
+        $stmt->bind_param($types, ...$params);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    // Ottieni prenotazioni per admin, coordinatori e utenti base
+    $prenotazioniAdmin = getPrenotazioniByUsernames($conn, [$username], $dataPrenotazione);
+    $prenotazioniCoordinatori = getPrenotazioniByUsernames($conn, $coordinatori, $dataPrenotazione);
+    $prenotazioniUtentiBase = getPrenotazioniByUsernames($conn, $utentiBase, $dataPrenotazione);
+} else {
+    // Se è un coordinatore, mostra solo le sue prenotazioni e quelle degli utenti assegnati
+    $queryUtentiBase = "SELECT username FROM utente WHERE ID_coordinatore = ?";
+    $stmt = $conn->prepare($queryUtentiBase);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $resultUtentiBase = $stmt->get_result();
+
+    $usernames = [$username];
+    while ($rowUtente = $resultUtentiBase->fetch_assoc()) {
+        $usernames[] = $rowUtente['username'];
+    }
+
+    $prenotazioni = [];
+    $luoghi = ['A1', 'A2', 'MR', 'PARCHEGGIO'];
+    foreach ($luoghi as $luogo) {
+        $placeholders = implode(',', array_fill(0, count($usernames), '?'));
+        $query = "SELECT posto, luogo, contModifiche, Data, username FROM prenotazione 
+                  WHERE luogo = ? AND Data = ? AND username IN ($placeholders)";
+        $stmt = $conn->prepare($query);
+        $types = str_repeat('s', count($usernames) + 2);
+        $params = array_merge([$luogo, $dataPrenotazione], $usernames);
+        $stmt->bind_param($types, ...$params);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $prenotazioni[] = $row;
+        }
+    }
 }
 
-// Recupera tutte le prenotazioni per i luoghi specificati e per la data selezionata
-$prenotazioni = [];
-
-// Query per il luogo A1
-$queryPrenotatiA1 = "SELECT posto, luogo, contModifiche, Data FROM prenotazione WHERE luogo = ? AND Data = ? AND username = ?";
-$stmt = $conn->prepare($queryPrenotatiA1);
-$luogoA1 = 'A1'; // Imposta il valore del luogo a A1
-$stmt->bind_param("sss", $luogoA1, $dataPrenotazione, $username);
-$stmt->execute();
-$resultPrenotatiA1 = $stmt->get_result();
-
-while ($rowPrenotati = $resultPrenotatiA1->fetch_assoc()) {
-    $prenotazioni[] = $rowPrenotati; // Aggiungi le prenotazioni di A1
-}
-
-// Query per il luogo A2
-$queryPrenotatiA2 = "SELECT posto, luogo, contModifiche, Data FROM prenotazione WHERE luogo = ? AND Data = ? AND username = ?";
-$stmt = $conn->prepare($queryPrenotatiA2);
-$luogoA2 = 'A2'; // Imposta il valore del luogo a A2
-$stmt->bind_param("sss", $luogoA2, $dataPrenotazione, $username);
-$stmt->execute();
-$resultPrenotatiA2 = $stmt->get_result();
-
-while ($rowPrenotati = $resultPrenotatiA2->fetch_assoc()) {
-    $prenotazioni[] = $rowPrenotati; // Aggiungi le prenotazioni di A2
-}
-
-
-// Query per il luogo MR
-$queryPrenotatiMR = "SELECT posto, luogo, contModifiche, Data FROM prenotazione WHERE luogo = ? AND Data = ? AND username = ?";
-$stmt = $conn->prepare($queryPrenotatiA2);
-$luogoMR = 'MR'; // Imposta il valore del luogo a A2
-$stmt->bind_param("sss", $luogoMR, $dataPrenotazione, $username);
-$stmt->execute();
-$resultPrenotatiA2 = $stmt->get_result();
-
-while ($rowPrenotati = $resultPrenotatiA2->fetch_assoc()) {
-    $prenotazioni[] = $rowPrenotati; // Aggiungi le prenotazioni di A2
-}
-
-
-
-// Gestione della modifica della prenotazione
 if (isset($_POST['modifica'])) {
     $posto = $_POST['posto'];
     $nuovaData = $_POST['nuovaData'];
 
-    error_log("Tentativo di modifica: posto = $posto, nuovaData = $nuovaData");
-
-    // Controlla se la nuova data è valida (deve essere maggiore di oggi)
     if ($nuovaData <= date('Y-m-d')) {
         $messaggio = "Non puoi modificare la prenotazione per oggi o per una data passata.";
     } else {
-        // Controlla se esiste già una prenotazione per il posto e il luogo nella nuova data
+        // Per admin, bisogna sapere l'username della prenotazione da modificare
+        if ($ruolo === 'admin' && isset($_POST['username'])) {
+            $usernameModifica = $_POST['username'];
+        } else {
+            $usernameModifica = $username;
+        }
+
+        $queryLuogo = "SELECT luogo FROM prenotazione WHERE posto = ? AND username = ?";
+        $stmt = $conn->prepare($queryLuogo);
+        $stmt->bind_param("ss", $posto, $usernameModifica);
+        $stmt->execute();
+        $resultLuogo = $stmt->get_result();
+        $luogoResult = $resultLuogo->fetch_assoc();
+        $luogoPrenotazione = $luogoResult['luogo'];
+
         $queryControllo = "SELECT * FROM prenotazione WHERE posto = ? AND luogo = ? AND Data = ?";
         $stmt = $conn->prepare($queryControllo);
-        $stmt->bind_param("sss", $posto, $luogoA1, $nuovaData);
+        $stmt->bind_param("sss", $posto, $luogoPrenotazione, $nuovaData);
         $stmt->execute();
         $resultControllo = $stmt->get_result();
 
-        error_log("Risultati della query di controllo: " . $resultControllo->num_rows);
-
-        // Controlla il numero di modifiche
-        $queryControlloModifiche = "SELECT contModifiche FROM prenotazione WHERE posto = ? AND username = ?";
-        $stmt = $conn->prepare($queryControlloModifiche);
-        $stmt->bind_param("ss", $posto, $username);
-        $stmt->execute();
-        $resultControlloModifiche = $stmt->get_result();
-        $rowControlloModifiche = $resultControlloModifiche->fetch_assoc();
-
         if ($resultControllo->num_rows > 0) {
-            $messaggio = "Esiste già una prenotazione per questo posto e luogo nella nuova data.";
-        } elseif ($rowControlloModifiche['contModifiche'] >= 2) {
-            $messaggio = "Hai raggiunto il limite di modifiche per questa prenotazione.";
+            $messaggio = "Esiste già una prenotazione per questo posto nella nuova data.";
         } else {
-            // Procedi con la modifica
-            $queryModifica = "UPDATE prenotazione SET Data = ?, contModifiche = contModifiche + 1 WHERE posto = ? AND username = ?";
+            $queryModifica = "UPDATE prenotazione SET Data = ? WHERE posto = ? AND username = ?";
             $stmt = $conn->prepare($queryModifica);
-            $stmt->bind_param("sss", $nuovaData, $posto, $username);
+            $stmt->bind_param("sss", $nuovaData, $posto, $usernameModifica);
             $stmt->execute();
-            $messaggio = "Prenotazione modificata con successo.";
-
-            // Reindirizza per visualizzare le prenotazioni aggiornate
             header("Location: visualizzazione.php?data=" . urlencode($nuovaData));
             exit();
         }
     }
 }
 
-// Gestione dell'eliminazione della prenotazione
 if (isset($_POST['elimina'])) {
     $posto = $_POST['posto'];
-
-    // Esegui la query per eliminare la prenotazione
+    // Per admin, bisogna sapere l'username della prenotazione da eliminare
+    if ($ruolo === 'admin' && isset($_POST['username'])) {
+        $usernameElimina = $_POST['username'];
+    } else {
+        $usernameElimina = $username;
+    }
     $queryElimina = "DELETE FROM prenotazione WHERE posto = ? AND username = ?";
     $stmt = $conn->prepare($queryElimina);
-    $stmt->bind_param("ss", $posto, $username);
+    $stmt->bind_param("ss", $posto, $usernameElimina);
     $stmt->execute();
     $messaggio = 'Prenotazione eliminata con successo.';
 }
 
-// Definisci la data di oggi
-$oggi = date('Y-m-d'); // Data di oggi
+$oggi = date('Y-m-d');
 
+if ($ruolo === 'admin') {
+    // Non serve separare ulteriormente, abbiamo già le tre categorie
+} else {
+    // Separare le prenotazioni per coordinatore e utenti base
+    $prenotazioniProprie = [];
+    $prenotazioniAltrui = [];
+    foreach ($prenotazioni as $p) {
+        if ($p['username'] === $username) {
+            $prenotazioniProprie[] = $p;
+        } else {
+            $prenotazioniAltrui[] = $p;
+        }
+    }
+}
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - ZVOLTA</title>
-    <link rel="stylesheet" href="vis.css"> <!-- Collegamento al file CSS -->
-</head>
-<body>
-    <header>
-        <div class="top-bar">
-            <div class="logo">
-                <a href="../home.php">
-                    <img src="../extra/logo.png" alt="ZVOLTA Logo">
-                </a>
-            </div>
-            <nav>
-                <?php if ($isLoggedIn): ?>
-                    <a href="../login/logout.php" class="login-button">LOGOUT</a>
-                <?php else: ?>
-                    <a href="../login/login.php" class="login-button">LOGIN</a>
-                <?php endif; ?>
-                <div class="user-icon">
-                    <img src="../extra/placeholder.png" alt="Foto">
-                </div>
-            </nav>
-        </div>
-    </header>
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Le tue prenotazioni</title>
+    <link rel="stylesheet" href="vis.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        form.inline {
+            display: inline;
+        }
+    </style>
 </head>
 <body>
-<div class="headers">
-    <h1>Prenotazioni per la data selezionata (<?php echo htmlspecialchars($dataPrenotazione); ?>)</h1>
-    
-    <form method="post">
-        <label for="data">Seleziona una data:</label>
-        <input type="date" id="data" name="data" value="<?php echo htmlspecialchars($dataPrenotazione); ?>" required>
-        <button type="submit">Visualizza Prenotazioni</button>
-    </form> <br>
-</div>
-    <?php if (isset($messaggio)): ?>
-        <p><?php echo htmlspecialchars($messaggio); ?></p>
-    <?php endif; ?>
-    
-    <?php if (count($prenotazioni) > 0): ?>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Posto</th>
-                    <th>Luogo</th>
-                    <?php if (array_filter($prenotazioni, function($p) use ($oggi) { return $p['Data'] > $oggi; })) : ?>
-                        <th>Modifica Data</th>
-                        <th>Elimina</th>
-                    <?php endif; ?>
-                </tr>
-            </thead>
-            <tbody>
-                <?php 
-                foreach ($prenotazioni as $prenotazione): 
-                    $dataPrenotazione = $prenotazione['Data']; // Data della prenotazione
-                ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($prenotazione['posto']); ?></td>
-                        <td><?php echo htmlspecialchars($prenotazione['luogo']); ?></td>
-                        <?php if ($dataPrenotazione > $oggi): // Controlla se la data è futura ?>
-                            <td>
-                                <form method="post">
-                                    <input type="hidden" name="posto" value="<?php echo htmlspecialchars($prenotazione['posto']); ?>">
-                                    <input type="date" name="nuovaData" required>
-                                    <button type="submit" name="modifica">Modifica</button>
-                                </form>
-                            </td>
-                            <td>
-                                <form method="post">
-                                    <input type="hidden" name="posto" value="<?php echo htmlspecialchars($prenotazione['posto']); ?>">
-                                    <button type="submit" name="elimina" onclick="return confirm('Sei sicuro di voler eliminare questa prenotazione?');">Elimina</button>
-                                </form>
-                            </td>
-                        <?php endif; ?>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    <?php else: ?>
-        <div class="headers">
-        <p>Non ci sono prenotazioni per la data selezionata.</p>
+<header>
+    <div class="top-bar">
+        <div class="logo">
+            <a href="../home.php">
+                <img src="../extra/logo.png" alt="ZVOLTA Logo">
+            </a>
         </div>
-    <?php endif; ?>
-    
+        <nav>
+            <?php if ($isLoggedIn): ?>
+                <a href="../login/logout.php" class="login-button">LOGOUT</a>
+            <?php else: ?>
+                <a href="../login/login.php" class="login-button">LOGIN</a>
+            <?php endif; ?>
+            <div class="user-icon">
+                <img src="../extra/placeholder.png" alt="Foto">
+            </div>
+        </nav>
+    </div>
+</header>
+<h1>Prenotazioni del <?php echo htmlspecialchars($dataPrenotazione); ?></h1>
+<form method="post">
+    <label for="data">Seleziona una data:</label>
+    <input type="date" name="data" value="<?php echo htmlspecialchars($dataPrenotazione); ?>" required>
+    <button type="submit">Visualizza</button>
+</form>
+<?php if (isset($messaggio)) echo "<p>$messaggio</p>"; ?>
+
+<?php if ($ruolo === 'admin'): ?>
+<h2>Prenotazioni Admin</h2>
+<?php if (count($prenotazioniAdmin) > 0): ?>
+<ul>
+    <?php foreach ($prenotazioniAdmin as $p): ?>
+        <li>
+            <strong><?php echo htmlspecialchars($p['username']); ?></strong> - 
+            Posto: <?php echo htmlspecialchars($p['posto']); ?> - 
+            Luogo: <?php echo htmlspecialchars($p['luogo']); ?>
+            <?php if ($p['Data'] > $oggi): ?>
+                <form class="inline" method="post">
+                    <input type="hidden" name="posto" value="<?php echo htmlspecialchars($p['posto']); ?>">
+                    <input type="hidden" name="username" value="<?php echo htmlspecialchars($p['username']); ?>">
+                    <input type="date" name="nuovaData" required>
+                    <button type="submit" name="modifica">Modifica</button>
+                </form>
+                <form class="inline" method="post">
+                    <input type="hidden" name="posto" value="<?php echo htmlspecialchars($p['posto']); ?>">
+                    <input type="hidden" name="username" value="<?php echo htmlspecialchars($p['username']); ?>">
+                    <button type="submit" name="elimina" onclick="return confirm('Sei sicuro?');">Elimina</button>
+                </form>
+            <?php endif; ?>
+        </li>
+    <?php endforeach; ?>
+</ul>
+<?php else: ?>
+<p>Nessuna prenotazione trovata per l'admin.</p>
+<?php endif; ?>
+
+<h2>Prenotazioni Coordinatori</h2>
+<?php if (count($prenotazioniCoordinatori) > 0): ?>
+<ul>
+    <?php foreach ($prenotazioniCoordinatori as $p): ?>
+        <li>
+            <strong><?php echo htmlspecialchars($p['username']); ?></strong> - 
+            Posto: <?php echo htmlspecialchars($p['posto']); ?> - 
+            Luogo: <?php echo htmlspecialchars($p['luogo']); ?>
+            <?php if ($p['Data'] > $oggi): ?>
+                <form class="inline" method="post">
+                    <input type="hidden" name="posto" value="<?php echo htmlspecialchars($p['posto']); ?>">
+                    <input type="date" name="nuovaData" required>
+                    <button type="submit" name="modifica">Modifica</button>
+                </form>
+                <form class="inline" method="post">
+                    <input type="hidden" name="posto" value="<?php echo htmlspecialchars($p['posto']); ?>">
+                    <button type="submit" name="elimina" onclick="return confirm('Sei sicuro?');">Elimina</button>
+                </form>
+            <?php endif; ?>
+        </li>
+    <?php endforeach; ?>
+</ul>
+<?php else: ?>
+<p>Nessuna prenotazione trovata per i coordinatori.</p>
+<?php endif; ?>
+
+<h2>Prenotazioni Utenti Base</h2>
+<?php if (count($prenotazioniUtentiBase) > 0): ?>
+<ul>
+    <?php foreach ($prenotazioniUtentiBase as $p): ?>
+        <li>
+            <strong><?php echo htmlspecialchars($p['username']); ?></strong> - 
+            Posto: <?php echo htmlspecialchars($p['posto']); ?> - 
+            Luogo: <?php echo htmlspecialchars($p['luogo']); ?>
+            <?php if ($p['Data'] > $oggi): ?>
+                <form class="inline" method="post">
+                    <input type="hidden" name="posto" value="<?php echo htmlspecialchars($p['posto']); ?>">
+                    <input type="date" name="nuovaData" required>
+                    <button type="submit" name="modifica">Modifica</button>
+                </form>
+                <form class="inline" method="post">
+                    <input type="hidden" name="posto" value="<?php echo htmlspecialchars($p['posto']); ?>">
+                    <button type="submit" name="elimina" onclick="return confirm('Sei sicuro?');">Elimina</button>
+                </form>
+            <?php endif; ?>
+        </li>
+    <?php endforeach; ?>
+</ul>
+<?php else: ?>
+<p>Nessuna prenotazione trovata per gli utenti base.</p>
+<?php endif; ?>
+<?php else: ?>
+<h2>Le tue prenotazioni</h2>
+<?php if (count($prenotazioniProprie) > 0): ?>
+<ul>
+    <?php foreach ($prenotazioniProprie as $p): ?>
+        <li>
+            <strong><?php echo htmlspecialchars($p['username']); ?></strong> - 
+            Posto: <?php echo htmlspecialchars($p['posto']); ?> - 
+            Luogo: <?php echo htmlspecialchars($p['luogo']); ?>
+            <?php if ($p['Data'] > $oggi): ?>
+                <form class="inline" method="post">
+                    <input type="hidden" name="posto" value="<?php echo htmlspecialchars($p['posto']); ?>">
+                    <input type="date" name="nuovaData" required>
+                    <button type="submit" name="modifica">Modifica</button>
+                </form>
+                <form class="inline" method="post">
+                    <input type="hidden" name="posto" value="<?php echo htmlspecialchars($p['posto']); ?>">
+                    <button type="submit" name="elimina" onclick="return confirm('Sei sicuro?');">Elimina</button>
+                </form>
+            <?php endif; ?>
+        </li>
+    <?php endforeach; ?>
+</ul>
+<?php else: ?>
+<p>Nessuna prenotazione trovata.</p>
+<?php endif; ?>
+
+<h2>Prenotazioni degli altri utenti</h2>
+<?php if (count($prenotazioniAltrui) > 0): ?>
+<ul>
+    <?php foreach ($prenotazioniAltrui as $p): ?>
+        <li>
+            <strong><?php echo htmlspecialchars($p['username']); ?></strong> - 
+            Posto: <?php echo htmlspecialchars($p['posto']); ?> - 
+            Luogo: <?php echo htmlspecialchars($p['luogo']); ?>
+            <?php if ($ruolo === 'admin' && $p['Data'] > $oggi): ?>
+                <form class="inline" method="post">
+                    <input type="hidden" name="posto" value="<?php echo htmlspecialchars($p['posto']); ?>">
+                    <button type="submit" name="modifica">Modifica</button>
+                </form>
+                <form class="inline" method="post">
+                    <input type="hidden" name="posto" value="<?php echo htmlspecialchars($p['posto']); ?>">
+                    <button type="submit" name="elimina" onclick="return confirm('Sei sicuro?');">Elimina</button>
+                </form>
+            <?php endif; ?>
+        </li>
+    <?php endforeach; ?>
+</ul>
+<?php else: ?>
+<p>Nessuna prenotazione trovata per gli altri utenti.</p>
+<?php endif; ?>
+<?php endif; ?>
 </body>
 </html>

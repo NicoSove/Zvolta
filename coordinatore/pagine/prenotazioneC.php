@@ -131,67 +131,67 @@ function getClassePosto($posto, $prenotazioni, $username) {
         </div>
     </header>
 
-    <div class="bg-gray-300 p-8 rounded-lg border-4 border-purple-300 w-3/4 lg:w-1/2">
-        <table class="w-full border-collapse text-center">
+    <div class="p-8 rounded-lg border-4 border-purple-300 w-3/4 lg:w-1/2">
+            <table class="w-full border-collapse text-center rounded-lg">
+                <tr>
+                    <td colspan="18" class="bg-gray-500 text-white font-semibold text-xl py-3 rounded-t">GROUP (C):</td>
+                </tr>
             <tr>
-                <td colspan="16" class="bg-gray-500 text-white font-semibold text-xl py-3 rounded-t">GROUP (C):</td>
+                <td class="<?= getClassePosto('A1', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer rounded-l-lg" onclick="makeReservation('A1')">A1</td>
+                <td class="<?= getClassePosto('A5', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('A5')">A5</td>
+                <td class="w-6"></td> <!-- piccolo spazio -->
+                <td class="<?= getClassePosto('B1', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('B1')">B1</td>
+                <td class="<?= getClassePosto('B5', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('B5')">B5</td>
+                <td class="w-6"></td> <!-- piccolo spazio -->
+                <td class="<?= getClassePosto('C1', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('C1')">C1</td>
+                <td class="<?= getClassePosto('C5', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('C5')">C5</td>
+                <td class="w-6"></td> <!-- piccolo spazio -->
+                <td class="<?= getClassePosto('D1', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('D1')">D1</td>
+                <td class="<?= getClassePosto('D5', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('D5')">D5</td>
+                <td class="w-6"></td> <!-- piccolo spazio -->
+                <td class="<?= getClassePosto('E1', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('E1')">E1</td>
+                <td class="<?= getClassePosto('E5', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('E5')">E5</td>
+                <td class="w-6"></td> <!-- piccolo spazio -->
+                <td class="<?= getClassePosto('F1', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer rounded-r-lg" onclick="makeReservation('F1')">F1</td>
+                <td class="<?= getClassePosto('F5', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer rounded-r-lg" onclick="makeReservation('F5')">F5</td>
             </tr>
             <tr>
-                <td class="<?= getClassePosto('A1', $prenotazioni, $username) ?> p-4 border border-gray-400 cursor-pointer rounded-l-lg" onclick="makeReservation('A1')">A1</td>
-                <td class="<?= getClassePosto('A5', $prenotazioni, $username) ?> p-4 border border-gray-400 cursor-pointer" onclick="makeReservation('A5')">A5</td>
-                <td class="w-6"></td> <!-- piccolo spazio -->
-                <td class="<?= getClassePosto('B1', $prenotazioni, $username) ?> p-4 border border-gray-400 cursor-pointer" onclick="makeReservation('B1')">B1</td>
-                <td class="<?= getClassePosto('B5', $prenotazioni, $username) ?> p-4 border border-gray-400 cursor-pointer" onclick="makeReservation('B5')">B5</td>
-                <td class="w-6"></td> <!-- piccolo spazio -->
-                <td class="<?= getClassePosto('C1', $prenotazioni, $username) ?> p-4 border border-gray-400 cursor-pointer" onclick="makeReservation('C1')">C1</td>
-                <td class="<?= getClassePosto('C5', $prenotazioni, $username) ?> p-4 border border-gray-400 cursor-pointer" onclick="makeReservation('C5')">C5</td>
-                <td class="w-6"></td> <!-- piccolo spazio -->
-                <td class="<?= getClassePosto('D1', $prenotazioni, $username) ?> p-4 border border-gray-400 cursor-pointer" onclick="makeReservation('D1')">D1</td>
-                <td class="<?= getClassePosto('D5', $prenotazioni, $username) ?> p-4 border border-gray-400 cursor-pointer" onclick="makeReservation('D5')">D5</td>
-                <td class="w-6"></td> <!-- piccolo spazio -->
-                <td class="<?= getClassePosto('E1', $prenotazioni, $username) ?> p-4 border border-gray-400 cursor-pointer" onclick="makeReservation('E1')">E1</td>
-                <td class="<?= getClassePosto('E5', $prenotazioni, $username) ?> p-4 border border-gray-400 cursor-pointer" onclick="makeReservation('E5')">E5</td>
-                <td class="w-6"></td> <!-- piccolo spazio -->
-                <td class="<?= getClassePosto('F1', $prenotazioni, $username) ?> p-4 border border-gray-400 cursor-pointer rounded-r-lg" onclick="makeReservation('F1')">F1</td>
-                <td class="<?= getClassePosto('F5', $prenotazioni, $username) ?> p-4 border border-gray-400 cursor-pointer rounded-r-lg" onclick="makeReservation('F5')">F5</td>
+                <td class="<?= getClassePosto('A2', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('A2')">A2</td>
+                <td class="<?= getClassePosto('A6', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('A6')">A6</td>
+                <td><?= '' ?></td> <!-- piccolo spazio -->
+                <td class="<?= getClassePosto('B2', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('B2')">B2</td>
+                <td class="<?= getClassePosto('B6', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('B6')">B6</td>
+                <td><?= '' ?></td> <!-- piccolo spazio -->
+                <td class="<?= getClassePosto('C2', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('C2')">C2</td>
+                <td class="<?= getClassePosto('C5', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('C5')">C5</td>
+                <td><?= '' ?></td> <!-- piccolo spazio -->
+                <td class="<?= getClassePosto('D2', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('D2')">D2</td>
+                <td class="<?= getClassePosto('D6', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('D6')">D6</td>
+                <td><?= '' ?></td> <!-- piccolo spazio -->
+                <td class="<?= getClassePosto('E2', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('E2')">E2</td>
+                <td class="<?= getClassePosto('E6', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('E6')">E6</td>
+                <td><?= '' ?></td> <!-- piccolo spazio -->
+                <td class="<?= getClassePosto('F2', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('F2')">F2</td>
+                <td class="<?= getClassePosto('F6', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('F6')">F6</td>
             </tr>
             <tr>
-                <td class="<?= getClassePosto('A2', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('A2')">A2</td>
-                <td class="<?= getClassePosto('A6', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('A6')">A6</td>
-                <td><?= '' ?></td> <!-- piccolo spazio -->
-                <td class="<?= getClassePosto('B2', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('B2')">B2</td>
-                <td class="<?= getClassePosto('B6', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('B6')">B6</td>
-                <td><?= '' ?></td> <!-- piccolo spazio -->
-                <td class="<?= getClassePosto('C2', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('C2')">C2</td>
-                <td class="<?= getClassePosto('C5', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('C5')">C5</td>
-                <td><?= '' ?></td> <!-- piccolo spazio -->
-                <td class="<?= getClassePosto('D2', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('D2')">D2</td>
-                <td class="<?= getClassePosto('D6', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('D6')">D6</td>
-                <td><?= '' ?></td> <!-- piccolo spazio -->
-                <td class="<?= getClassePosto('E2', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('E2')">E2</td>
-                <td class="<?= getClassePosto('E6', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('E6')">E6</td>
-                <td><?= '' ?></td> <!-- piccolo spazio -->
-                <td class="<?= getClassePosto('F2', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('F2')">F2</td>
-                <td class="<?= getClassePosto('F6', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('F6')">F6</td>
-            </tr>
-            <tr>
-                <td class="<?= getClassePosto('A3', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('A3')">A3</td>
-                <td class="<?= getClassePosto('A7', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('A7')">A7</td>
+                <td class="<?= getClassePosto('A3', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('A3')">A3</td>
+                <td class="<?= getClassePosto('A7', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('A7')">A7</td>
                 <td class="w-6"></td> <!-- piccolo spazio -->
-                <td class="<?= getClassePosto('B3', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('B3')">B3</td>
-                <td class="<?= getClassePosto('B7', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('B7')">B7</td>
+                <td class="<?= getClassePosto('B3', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('B3')">B3</td>
+                <td class="<?= getClassePosto('B7', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('B7')">B7</td>
                 <td class="w-6"></td> <!-- piccolo spazio -->
-                <td class="<?= getClassePosto('C3', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('C3')">C3</td>
-                <td class="<?= getClassePosto('C7', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('C7')">C7</td>
+                <td class="<?= getClassePosto('C3', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('C3')">C3</td>
+                <td class="<?= getClassePosto('C7', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('C7')">C7</td>
                 <td class="w-6"></td> <!-- piccolo spazio -->
-                <td class="<?= getClassePosto('D3', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('D3')">D3</td>
-                <td class="<?= getClassePosto('D7', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('D7')">D7</td>
+                <td class="<?= getClassePosto('D3', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('D3')">D3</td>
+                <td class="<?= getClassePosto('D7', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('D7')">D7</td>
                 <td class="w-6"></td> <!-- piccolo spazio -->
-                <td class="<?= getClassePosto('E3', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('E3')">E3</td>
-                <td class="<?= getClassePosto('E7', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('E7')">E7</td>
+                <td class="<?= getClassePosto('E3', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('E3')">E3</td>
+                <td class="<?= getClassePosto('E7', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('E7')">E7</td>
                 <td class="w-6"></td> <!-- piccolo spazio -->
-                <td class="<?= getClassePosto('F3', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('F3')">F3</td>
-                <td class="<?= getClassePosto('F7', $prenotazioni, $username) ?> p-3 border border-gray-400 cursor-pointer" onclick="makeReservation('F7')">F7</td>
+                <td class="<?= getClassePosto('F3', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('F3')">F3</td>
+                <td class="<?= getClassePosto('F7', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer" onclick="makeReservation('F7')">F7</td>
             </tr>
             <tr>
                 <td class="<?= getClassePosto('A4', $prenotazioni, $username) ?> p-6 w-16 h-16 border border-gray-400 cursor-pointer rounded-l-lg" onclick="makeReservation('A4')">A4</td>

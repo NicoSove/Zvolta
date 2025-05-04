@@ -58,7 +58,9 @@ if (isset($_POST['modifica'])) {
                 if (!$stmt) {
                     $messaggio = "Errore prepare update: " . $conn->error;
                 } else {
-                    $stmt->bind_param("ssssssss", $nome, $cognome, $email, $telefono, $ruoloUtente, $coordinatore, $passwordHash, $userToEdit);
+                    // Gestione coordinatore: se NULL, passare stringa vuota
+                    $coordinatoreParam = $coordinatore === NULL ? '' : $coordinatore;
+                    $stmt->bind_param("ssssssss", $nome, $cognome, $email, $telefono, $ruoloUtente, $coordinatoreParam, $passwordHash, $userToEdit);
                     if ($stmt->execute()) {
                         $messaggio = "Utente modificato con successo.";
                     } else {
@@ -87,7 +89,9 @@ if (isset($_POST['modifica'])) {
                 if (!$stmt) {
                     $messaggio = "Errore prepare update: " . $conn->error;
                 } else {
-                    $stmt->bind_param("sssssss", $nome, $cognome, $email, $telefono, $ruoloUtente, $coordinatore, $userToEdit);
+                    // Gestione coordinatore: se NULL, passare stringa vuota
+                    $coordinatoreParam = $coordinatore === NULL ? '' : $coordinatore;
+                    $stmt->bind_param("sssssss", $nome, $cognome, $email, $telefono, $ruoloUtente, $coordinatoreParam, $userToEdit);
                     if ($stmt->execute()) {
                         $messaggio = "Utente modificato con successo.";
                     } else {
