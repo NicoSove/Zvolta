@@ -2,6 +2,8 @@
 session_start();
 include 'connessione.php';
 
+$isLoggedIn = isset($_SESSION['username']);
+
 // Controllo se l'utente è loggato, altrimenti reindirizzo al login
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
@@ -175,9 +177,34 @@ $users = $resultUsers->fetch_all(MYSQLI_ASSOC);
             font-weight: bold;
         }
     </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="controllo.css"> 
 </head>
 <body>
-<h1>Gestione Utenti</h1>
+    <header>
+        <div class="top-bar">
+            <div class="logo">
+                <a href="../home.php">
+                    <img src="../extra/logo.png" alt="ZVOLTA Logo">
+                </a>
+            </div>
+            <nav>
+                <?php if ($isLoggedIn): ?>
+                    <a href="../login/logout.php" class="login-button">LOGOUT</a>
+                <?php else: ?>
+                    <a href="../login/login.php" class="login-button">LOGIN</a>
+                <?php endif; ?>
+                <div class="user-icon">
+                    <img src="../extra/placeholder.png" alt="Foto">
+                </div>
+            </nav>
+        </div>
+    </header>
+
+
+
+<h1 style="font-size: 1.5em; margin-top: 10px; margin-bottom: 20px;">Gestione Utenti</h1>
 <?php if (isset($messaggio)) echo "<p class='message'>$messaggio</p>"; ?>
 <table>
     <thead>
