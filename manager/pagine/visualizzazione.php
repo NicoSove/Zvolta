@@ -4,7 +4,7 @@ include 'connessione.php';
 $isLoggedIn = isset($_SESSION['username']);
 
 if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
+    header(" ../../login/Location: login.php");
     exit();
 }
 
@@ -204,9 +204,9 @@ if ($ruolo === 'admin') {
         </div>
         <nav>
             <?php if ($isLoggedIn): ?>
-                <a href="../login/logout.php" class="login-button">LOGOUT</a>
+                <a href="../../login/logout.php" class="login-button">LOGOUT</a>
             <?php else: ?>
-                <a href="../login/login.php" class="login-button">LOGIN</a>
+                <a href="../../login/login.php" class="login-button">LOGIN</a>
             <?php endif; ?>
             <div class="user-icon">
                 <img src="../extra/placeholder.png" alt="Foto">

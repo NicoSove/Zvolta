@@ -40,18 +40,20 @@ $isLoggedIn = isset($_SESSION['username']);
     <main>
         <section class="hero">
             <div class="hero-content">
-                <h1>ZVOLTA</h1>
-                <p>CONSULENCE AND ASSISTANCE</p>
+                <h1>
+                    ZVOLTA
+                </h1>
+                <p>Consulenza e assistenza</p>
             </div>
         </section>
         
         <section class="buttons-container">
             <a href="#" class="button">SITO WEB AZIENDALE ></a>
             <div class="divider"></div>
-            <a href="./utenteBase/pagine/prenotazione.php" class="button">RESERVATIONS ></a><br><br>
-            <a href="./utenteBase/extra/about.php" class="button1">WHAT ABOUT US? ></a>
+            <a href="./extra/about.php" class="button1">ABOUT US ></a>
             <div class="divider"></div>
-            <a href="./utenteBase/pagine/visualizzazione.php" class="button1">MANAGE ></a>
+            <a href="./login/login.php" class="button">PRENOTAZIONI ></a>
+            <div class="divider"></div>
         </section>
     </main>
     </div>

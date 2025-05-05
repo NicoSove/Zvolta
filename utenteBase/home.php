@@ -29,7 +29,7 @@ $isLoggedIn = isset($_SESSION['username']);
                     <a href="./utenteBase/login/login.php" class="login-button">LOGIN</a>
                 <?php endif; ?>
                 <div class="user-icon">
-                    <a href= "./utenteBase/login/visUtente.php">
+                    <a href= "./pagine/visUtente.php">
                         <img src="./utenteBase/extra/placeholder.png" alt="Foto">
                     </a>
                 </div>
@@ -40,8 +40,16 @@ $isLoggedIn = isset($_SESSION['username']);
     <main>
         <section class="hero">
             <div class="hero-content">
-                <h1>ZVOLTA</h1>
-                <p>CONSULENCE AND ASSISTANCE</p>
+                <h1>
+                    <?php
+                    if ($isLoggedIn && isset($_SESSION['username'])) {
+                        echo "Benvenuto " . htmlspecialchars($_SESSION['username']);
+                    } else {
+                        echo "Benvenuto";
+                    }
+                    ?>
+                </h1>
+                <p>Cosa vuoi fare oggi?</p>
             </div>
         </section>
         
@@ -49,7 +57,7 @@ $isLoggedIn = isset($_SESSION['username']);
             <a href="#" class="button">SITO WEB AZIENDALE ></a>
             <div class="divider"></div>
             <a href="./utenteBase/pagine/prenotazione.php" class="button">RESERVATIONS ></a><br><br>
-            <a href="./utenteBase/extra/about.php" class="button1">WHAT ABOUT US? ></a>
+            <a href="../extra/about.php" class="button1">WHAT ABOUT US? ></a>
             <div class="divider"></div>
             <a href="./utenteBase/pagine/visualizzazione.php" class="button1">MANAGE ></a>
         </section>

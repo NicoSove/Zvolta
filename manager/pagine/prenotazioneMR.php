@@ -4,7 +4,7 @@ include 'connessione.php'; // Assicurati che questo file contenga la connessione
 
 // Controllo se l'utente è loggato
 if (!isset($_SESSION['username'])) {
-    header("Location: ../login/login.php");
+    header("Location: ../../login/login.php");
     exit();
 }
 
@@ -18,15 +18,15 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows === 0) {
-    header("Location: login.php");
+    header("Location: ../../login/login.php");
     exit();
 }
 
 $row = $result->fetch_assoc();
 
 // Se il ruolo non è 'utente_base', reindirizza
-if ($row['ruolo_utente'] !== 'utente_base') {
-    header("Location: login.php");
+if ($row['ruolo_utente'] !== 'admin') {
+    header("Location: ../../login/login.php");
     exit();
 }
 
@@ -112,7 +112,7 @@ function getClassePosto($posto, $prenotazioni, $username) {
             </a>
         </div>
         <nav class="flex items-center">
-            <a href="../login/logout.php" class="login-button text-blue-500 font-bold mr-4">LOGOUT</a>
+            <a href="../../login/logout.php" class="login-button text-blue-500 font-bold mr-4">LOGOUT</a>
             <div class="user-icon">
                 <img src="../extra/placeholder.png" alt="Foto" class="h-10 w-10 rounded-full">
             </div>

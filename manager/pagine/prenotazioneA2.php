@@ -4,7 +4,7 @@ include 'connessione.php'; // Assicurati che questo file contenga la connessione
 $isLoggedIn = isset($_SESSION['username']);
 // Controllo se l'utente è loggato
 if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
+    header("Location:  ../../login/login.php");
     exit();
 }
 
@@ -18,15 +18,15 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows === 0) {
-    header("Location: login.php");
+    header("Location: ../../login/login.php");
     exit();
 }
 
 $row = $result->fetch_assoc();
 
 // Se il ruolo non è 'utente_base', reindirizza
-if ($row['ruolo_utente'] !== 'utente_base') {
-    header("Location: login.php");
+if ($row['ruolo_utente'] !== 'admin') {
+    header("Location: ../../login/login.php");
     exit();
 }
 
@@ -105,9 +105,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['posto'])) {
             </div>
             <nav>
                 <?php if ($isLoggedIn): ?>
-                    <a href="../login/logout.php" class="login-button">LOGOUT</a>
+                    <a href="../../login/logout.php" class="login-button">LOGOUT</a>
                 <?php else: ?>
-                    <a href="../login/login.php" class="login-button">LOGIN</a>
+                    <a href="../../login/login.php" class="login-button">LOGIN</a>
                 <?php endif; ?>
                 <div class="user-icon">
                     <img src="../extra/placeholder.png" alt="Foto">

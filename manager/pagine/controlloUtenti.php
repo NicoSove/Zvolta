@@ -6,7 +6,7 @@ $isLoggedIn = isset($_SESSION['username']);
 
 // Controllo se l'utente è loggato, altrimenti reindirizzo al login
 if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
+    header("Location:  ../../login/login.php");
     exit();
 }
 
@@ -22,7 +22,7 @@ $result = $stmt->get_result();
 
 // Se l'utente non esiste, reindirizzo al login
 if ($result->num_rows === 0) {
-    header("Location: login.php");
+    header("Location: ../../login/login.php");
     exit();
 }
 $row = $result->fetch_assoc();
@@ -30,7 +30,7 @@ $ruolo = $row['ruolo_utente'];
 
 // Se l'utente non è admin, reindirizzo al login
 if ($ruolo !== 'admin') {
-    header("Location: login.php");
+    header("Location:  ../../login/login.php");
     exit();
 }
 
@@ -191,9 +191,9 @@ $users = $resultUsers->fetch_all(MYSQLI_ASSOC);
             </div>
             <nav>
                 <?php if ($isLoggedIn): ?>
-                    <a href="../login/logout.php" class="login-button">LOGOUT</a>
+                    <a href="../../login/logout.php" class="login-button">LOGOUT</a>
                 <?php else: ?>
-                    <a href="../login/login.php" class="login-button">LOGIN</a>
+                    <a href="../../login/login.php" class="login-button">LOGIN</a>
                 <?php endif; ?>
                 <div class="user-icon">
                     <img src="../extra/placeholder.png" alt="Foto">
@@ -202,9 +202,6 @@ $users = $resultUsers->fetch_all(MYSQLI_ASSOC);
         </div>
     </header>
 
-
-
-<h1 style="font-size: 1.5em; margin-top: 10px; margin-bottom: 20px;">Gestione Utenti</h1>
 <?php if (isset($messaggio)) echo "<p class='message'>$messaggio</p>"; ?>
 <table>
     <thead>

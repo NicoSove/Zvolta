@@ -230,8 +230,8 @@ nav {
   }
 
   .cards img{
-    height: 80px;
-    width: 80px;
+    height: 60px;
+    width: 60px;
     padding: 10%;
     margin-left: 60%;
     margin-bottom: 5%;
@@ -241,10 +241,14 @@ nav {
     background-color: #002d74;
   }
     .cards .blue {
-        background-color:#03a283
+        background-color:#03a283;
     }
   .cards .green {
-    background-color:#35808b
+    background-color:#35808b;
+  }
+
+  .cards .yellow {
+    background-color: #6ea901;
   }
   
   .cards .card {
@@ -253,8 +257,8 @@ nav {
     justify-content: center;
     flex-direction: column;
     text-align: left;
-    height: 100px;
-    width: 400px;
+    height: 75px;
+    width: 300px;
     border-radius: 10px;
     color: white;
     cursor: pointer;
