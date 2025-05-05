@@ -50,6 +50,12 @@ $isLoggedIn = isset($_SESSION['username']);
         <p class="second-text"></p>
         <img src= "../images/meeting.png">
     </div>
+    
+    <div class="card yellow" onclick="window.location='prenotazioneC.php';">
+        <p class="tip">Parking</p>
+        <p class="second-text"></p>
+        <img src= "../images/parking.png">
+    </div>
 </div>
 
 

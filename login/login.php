@@ -88,7 +88,7 @@ if ($_POST) {
                     // Redirect in base al ruolo
                     if ($ruoloUtente === 'utente_base') {
                         header("Location: ../utenteBase/home.php");
-                    } elseif ($ruoloUtente === 'manager') {
+                    } elseif ($ruoloUtente === 'admin') {
                         header("Location: ../manager/home.php");
                     } elseif ($ruoloUtente === 'coordinatore') {
                         header("Location: ../coordinatore/home.php");
