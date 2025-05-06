@@ -62,32 +62,39 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['posto'])) {
         echo "<script>alert('Il posto $posto nel luogo $luogo è già prenotato per il giorno successivo. Scegli un altro posto.');</script>";
     } else {
         // Controlla quante prenotazioni ha già l'utente per la stessa data
-        $stmt = $conn->prepare("SELECT COUNT(*) as count FROM prenotazione WHERE username = ? AND Data = ?");
-        $stmt->bind_param("ss", $username, $nextDay);
-        $stmt->execute();
-        $resultCount = $stmt->get_result();
-        $rowCount = $resultCount->fetch_assoc();
+        $stmtCount = $conn->prepare("SELECT COUNT(*) as count FROM prenotazione WHERE username = ? AND Data = ?");
+        $stmtCount->bind_param("ss", $username, $nextDay);
+        $stmtCount->execute();
+        $resultCountUser = $stmtCount->get_result();
+        $rowCountUser = $resultCountUser->fetch_assoc();
 
-        // Permetti fino a 3 prenotazioni per il 'coordinatore'
-        if ($rowCount['count'] >= 3) {
-            echo "<script>alert('Come coordinatore, puoi prenotare solo fino a 3 posti contemporaneamente.');</script>";
+        // Nuova logica per controllare il numero totale di prenotazioni dell'utente per il giorno successivo
+        $stmtCountUserBookings = $conn->prepare("SELECT COUNT(*) as totalBookings FROM prenotazione WHERE username = ? AND Data = ?");
+        $stmtCountUserBookings->bind_param("ss", $username, $nextDay);
+        $stmtCountUserBookings->execute();
+        $resultCountUserBookings = $stmtCountUserBookings->get_result();
+        $rowCountUserBookings = $resultCountUserBookings->fetch_assoc();
+        $stmtCountUserBookings->close();
+
+        if ($rowCountUserBookings['totalBookings'] >= 3) {
+            echo "<script>alert('Come coordinatore, non puoi fare più di 3 prenotazioni per lo stesso giorno.');</script>";
         } else {
             // Inserisce la nuova prenotazione
             $stmt = $conn->prepare("INSERT INTO prenotazione (Data, username, posto, contModifiche, luogo) VALUES (?, ?, ?, 0, ?)");
-            $stmt->bind_param("ssss", $nextDay, $username, $posto, $luogo); // Aggiungi $luogo come parametro
-            
+            $stmt->bind_param("ssss", $nextDay, $username, $posto, $luogo);
             if ($stmt->execute()) {
                 $prenotazioneSuccess = true;
                 $_SESSION["prenOK"] = true;
                 echo "<script>
                         document.getElementById('successMessage').style.display = 'block';
                         alert('Prenotazione effettuata con successo!');
-                    </script>";
+                      </script>";
                 header("Location: " . $_SERVER['PHP_SELF']);
                 exit();
             } else {
                 echo "<script>alert('Errore nella prenotazione: " . addslashes($conn->error) . "');</script>";
             }
+            $stmt->close();
         }
     }
     $stmt->close();
